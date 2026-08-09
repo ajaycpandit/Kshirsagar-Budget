@@ -8,7 +8,6 @@
   :root{
     --bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--ink:#e8eaed;--muted:#9aa3b2;
     --accent:#6ea8fe;--accent2:#4f7ce0;--paid:#2ea36b;--paidbg:#12291f;--part:#e0b23a;--partbg:#2b2610;--pend:#d0863a;--pendbg:#2b2013;--danger:#e5484d;--chip:#242a35;
-    --c-int:#6ea8fe;--c-kit:#c58af9;--c-fur:#4fd1c5;--c-rent:#e5883a;--c-app:#e35d8a;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
@@ -17,13 +16,14 @@
   .sub{color:var(--muted);font-size:12px;margin-top:2px}
   .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
   input,button,select{font-family:inherit;font-size:13px}
-  .who{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 10px;min-width:140px}
+  .who{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 10px;min-width:130px}
+  .budgetsel{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 10px;min-width:150px;font-weight:bold}
   button{background:var(--chip);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer}
   button:hover{border-color:var(--accent)}
   button.primary{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:bold}
   button.primary:hover{background:var(--accent)}
   button.danger{color:#ffb4b6}button.danger:hover{border-color:var(--danger)}
-  .wrap{max-width:1080px;margin:0 auto;padding:16px}
+  .wrap{max-width:1180px;margin:0 auto;padding:16px}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:8px}
   .stat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
   .stat .lbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
@@ -41,27 +41,32 @@
   .filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:16px 0 8px}
   .fbtn{padding:6px 12px;border:1px solid var(--line);border-radius:20px;background:var(--panel2);color:var(--muted);cursor:pointer;font-size:12px}
   .fbtn.active{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:bold}
-  table{width:100%;border-collapse:collapse}
-  th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:8px 8px;border-bottom:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;table-layout:fixed}
+  th{position:relative;text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:8px 8px;border-bottom:1px solid var(--line);overflow:hidden}
   th.num,td.num{text-align:right}
-  td{padding:3px 6px;border-bottom:1px solid #22262f;vertical-align:middle}
+  td{padding:3px 6px;border-bottom:1px solid #22262f;vertical-align:middle;overflow:hidden}
+  .resizer{position:absolute;right:0;top:0;width:8px;height:100%;cursor:col-resize;user-select:none}
+  .resizer:hover{background:var(--accent)}
   .cell{background:transparent;border:1px solid transparent;color:var(--ink);border-radius:6px;padding:7px 8px;width:100%}
   .cell:hover{border-color:var(--line)}.cell:focus{border-color:var(--accent);background:var(--panel);outline:none}
   .cell.num{text-align:right;font-variant-numeric:tabular-nums}
   select.cell{cursor:pointer}
+  .moneywrap{position:relative;display:block}
+  .moneywrap::before{content:'\u20B9';position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none}
+  .moneywrap .cell{padding-left:20px}
   .catpill{display:inline-flex;align-items:center;gap:6px}
   .status{border-radius:20px;padding:5px 11px;border:1px solid var(--line);font-weight:bold;font-size:12px;white-space:nowrap;display:inline-block;text-align:center}
   .status.Paid{background:var(--paidbg);color:var(--paid);border-color:#1f5c3f}
   .status.Partial{background:var(--partbg);color:var(--part);border-color:#5c5320}
   .status.Pending{background:var(--pendbg);color:var(--pend);border-color:#5c4620}
-  .remain{font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap}
-  .rowbtn{opacity:.4;padding:4px 8px;font-size:13px}tr:hover .rowbtn{opacity:1}
+  .inst{font-size:11px;color:var(--part);white-space:nowrap;margin-top:3px}
+  .instbtns button{padding:2px 8px;font-size:13px;margin:0 1px}
+  .rowbtn{opacity:.45;padding:4px 8px;font-size:13px}tr:hover .rowbtn{opacity:1}
   .totalrow td{font-weight:bold;border-top:2px solid var(--line);padding-top:10px}
-  .addrow{margin:12px 0 4px}.addrow button{color:var(--muted)}
+  .addrow{margin:12px 0 4px;display:flex;gap:8px;flex-wrap:wrap}.addrow button{color:var(--muted)}
   .flash{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent2);color:#fff;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .3s;z-index:50}.flash.show{opacity:1}
   .note{background:#1b2330;border:1px solid #2b3a52;color:#b9cdf0;border-radius:8px;padding:10px 12px;font-size:12px;margin:16px 0 4px}
   .empty{color:var(--muted);padding:24px;text-align:center}
-  /* mobile card list (hidden on desktop) */
   .cards{display:none}
   .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
   .pcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
@@ -69,17 +74,19 @@
   .pcard .fld label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
   .pcard .cell{background:var(--panel);border:1px solid var(--line)}
   .pcard .two{display:flex;gap:10px}.pcard .two>div{flex:1}
+  .instbox{background:var(--partbg);border:1px solid #5c5320;border-radius:8px;padding:10px;margin:8px 0}
+  .instbox .lbl{color:var(--part);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:bold}
   #lock{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;align-items:center;justify-content:center}
   .lockbox{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:30px;width:320px;max-width:90vw;text-align:center}
   .lockbox h1{font-size:18px;margin:0 0 4px}.lockbox p{color:var(--muted);font-size:12px;margin:0 0 18px}
   .lockbox input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:11px;margin-bottom:10px;text-align:center}
   .lockbox button{width:100%}.lockerr{color:var(--danger);font-size:12px;height:16px;margin-top:6px}
-  @media(max-width:760px){
+  @media(max-width:820px){
     .desktop-table{display:none}
     .cards{display:block}
     .title{font-size:18px}
     .stat .val{font-size:20px}
-    button,.who{padding:9px 12px}
+    button,.who,.budgetsel{padding:9px 12px}
     .catrow .nm{min-width:110px}
   }
 </style>
@@ -96,17 +103,22 @@
 
 <header>
   <div class="title">&#127968; Home Expense Tracker</div>
-  <div class="sub">Every payment in one place &middot; partial payments &middot; edits saved in your browser</div>
+  <div class="sub" id="subline">Every payment in one place &middot; partial &amp; installment plans</div>
   <div class="toolbar">
+    <select class="budgetsel" id="budgetsel" onchange="switchBudget(this.value)"></select>
+    <button onclick="addBudget()">&#65291; Budget</button>
+    <button onclick="renameBudget()">&#9998;</button>
+    <button class="danger" onclick="deleteBudget()">&#128465;</button>
+    <span style="flex:1"></span>
     <input id="who" class="who" placeholder="Your name (for log)">
     <button class="primary" onclick="save()">&#128190; Save</button>
-    <button onclick="doExport()">&#11015;&#65039; Export</button>
-    <button onclick="document.getElementById('imp').click()">&#11014;&#65039; Import</button>
+    <button onclick="doExportJSON()">JSON</button>
+    <button onclick="doExportExcel()">&#128202; Excel</button>
+    <button onclick="document.getElementById('imp').click()">&#11014;&#65039;</button>
     <input type="file" id="imp" accept=".json" style="display:none" onchange="doImport(event)">
     <button onclick="showLog()">&#128339; Log</button>
-    <button onclick="window.print()">&#128424;&#65039; Print</button>
-    <span style="flex:1"></span>
-    <button class="danger" onclick="clearAll()">Clear all</button>
+    <button onclick="window.print()">&#128424;&#65039;</button>
+    <button class="danger" onclick="clearAll()">Clear</button>
     <button class="danger" onclick="lock()">Lock</button>
   </div>
 </header>
@@ -114,6 +126,7 @@
 <div class="wrap" id="app"></div>
 <div class="flash" id="flash"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 var PASSCODE="Shree";
 var RS=function(n){return '\u20B9'+(Math.round(+n||0)).toLocaleString('en-IN');};
@@ -121,20 +134,24 @@ var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'
 function fmtDate(iso){if(!iso)return '';var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso);if(!m)return iso;return m[3]+'-'+MON[(+m[2])-1]+'-'+m[1];}
 function parseDate(str){str=(str||'').trim();var m=/^(\d{1,2})[- \/]([A-Za-z]{3,})[- \/](\d{4})$/.exec(str);if(m){var mi=-1;for(var j=0;j<12;j++){if(MON[j].toLowerCase()===m[2].slice(0,3).toLowerCase()){mi=j;break;}}if(mi>=0)return m[3]+'-'+String(mi+1).padStart(2,'0')+'-'+String(+m[1]).padStart(2,'0');}m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(str);if(m)return m[1]+'-'+String(+m[2]).padStart(2,'0')+'-'+String(+m[3]).padStart(2,'0');return str;}
 
-var CATS=[
-  {id:'Interior Work',color:'var(--c-int)'},
-  {id:'Kitchen',color:'var(--c-kit)'},
-  {id:'Furniture & Items',color:'var(--c-fur)'},
-  {id:'Rented Flat',color:'var(--c-rent)'},
-  {id:'Appliances',color:'var(--c-app)'}
-];
-function catColor(c){for(var i=0;i<CATS.length;i++)if(CATS[i].id===c)return CATS[i].color;return 'var(--muted)';}
+var PALETTE=['#6ea8fe','#c58af9','#4fd1c5','#e5883a','#e35d8a','#8ad48a','#f7c948','#7f9cf5','#f78da7','#63b3ed','#b794f4','#68d391'];
 
-/* each row: cat, item, amt (total), paid (paid so far), date */
-function statusOf(r){var p=+r.paid||0,a=+r.amt||0;if(p<=0)return 'Pending';if(p>=a)return 'Paid';return 'Partial';}
-function remainOf(r){return Math.max(0,(+r.amt||0)-(+r.paid||0));}
+/* ---- installment model ----
+   row: cat, item, amt(total), paid(paidSoFar for non-installment), date,
+        inst:{on:bool, per:perInstallmentAmount, count:totalInstallments, done:installmentsPaid}
+   For installment rows: total = per*count (auto), paidSoFar = per*done. */
+function isInst(r){return r.inst&&r.inst.on;}
+function rowTotal(r){return isInst(r)?((+r.inst.per||0)*(+r.inst.count||0)):(+r.amt||0);}
+function rowPaid(r){return isInst(r)?((+r.inst.per||0)*(+r.inst.done||0)):Math.min(+r.paid||0,+r.amt||0);}
+function statusOf(r){var p=rowPaid(r),a=rowTotal(r);if(a<=0)return 'Pending';if(p<=0)return 'Pending';if(p>=a)return 'Paid';return 'Partial';}
+function remainOf(r){return Math.max(0,rowTotal(r)-rowPaid(r));}
 
-function seed(){return[
+function defaultCats(){return[
+  {id:'Interior Work',color:'#6ea8fe'},{id:'Kitchen',color:'#c58af9'},
+  {id:'Furniture & Items',color:'#4fd1c5'},{id:'Rented Flat',color:'#e5883a'},
+  {id:'Appliances',color:'#e35d8a'},{id:'Installation',color:'#f7c948'}
+];}
+function seedRows(){return[
   {cat:'Interior Work',item:'Interior work \u2013 advance (68.89%)',amt:475000,paid:475000,date:'2026-05-15'},
   {cat:'Interior Work',item:'Interior work \u2013 after 50% done (25%)',amt:180000,paid:180000,date:'2026-05-29'},
   {cat:'Interior Work',item:'Interior work \u2013 final (5%)',amt:34504,paid:0,date:'2026-06-15'},
@@ -151,131 +168,186 @@ function seed(){return[
   {cat:'Appliances',item:'Home theater',amt:3000,paid:0,date:'2026-07-10'}
 ];}
 
-var STORE='home_expense_tracker_v2',LOGK='home_expense_log_v2';
-function load(){try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}return seed();}
-var rows=load();
-var log=JSON.parse(localStorage.getItem(LOGK)||'[]');
+var STORE='home_expense_tracker_v3';
+function loadStore(){try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
+  return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};}
+var store=loadStore();
+if(!store.budgets[store.active])store.active=Object.keys(store.budgets)[0];
 var filterCat='All',filterStatus='All',viewLog=false;
+var colW=JSON.parse(localStorage.getItem('het_colw')||'null');
 document.getElementById('who').value=localStorage.getItem('het_who')||'';
 
-function persist(){localStorage.setItem(STORE,JSON.stringify(rows));localStorage.setItem(LOGK,JSON.stringify(log));}
+function cur(){return store.budgets[store.active];}
+function rows(){return cur().rows;}
+function cats(){return cur().cats;}
+function catColor(c){var cs=cats();for(var i=0;i<cs.length;i++)if(cs[i].id===c)return cs[i].color;return '#9aa3b2';}
+function persist(){localStorage.setItem(STORE,JSON.stringify(store));}
 function save(){persist();flash('Saved \u2713');}
 function who(){var w=document.getElementById('who').value.trim()||'Someone';localStorage.setItem('het_who',w);return w;}
-function record(what){log.unshift({who:who(),what:what,when:new Date().toISOString()});if(log.length>500)log.length=500;persist();}
+function record(what){cur().log.unshift({who:who(),what:what,when:new Date().toISOString()});if(cur().log.length>500)cur().log.length=500;persist();}
 
 function unlock(){var v=document.getElementById('pass').value;if(v===PASSCODE){sessionStorage.setItem('het_unlocked','1');document.getElementById('lock').style.display='none';render();}else{document.getElementById('lockerr').textContent='Incorrect passcode';}}
 function lock(){sessionStorage.removeItem('het_unlocked');document.getElementById('lock').style.display='flex';document.getElementById('pass').value='';document.getElementById('lockerr').textContent='';}
 if(sessionStorage.getItem('het_unlocked')==='1')document.getElementById('lock').style.display='none';
 
+/* ---- budgets ---- */
+function refreshBudgetSel(){var sel=document.getElementById('budgetsel');sel.innerHTML=Object.keys(store.budgets).map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');document.getElementById('subline').textContent=store.active+' \u00B7 partial & installment plans';}
+function switchBudget(n){store.active=n;filterCat='All';filterStatus='All';persist();render();}
+function addBudget(){var n=prompt('Name for the new budget:');if(!n)return;n=n.trim();if(!n)return;if(store.budgets[n]){alert('That name exists.');return;}var empty=confirm('OK = start EMPTY.\nCancel = copy current categories (no rows).');store.budgets[n]={rows:[],cats:empty?defaultCats():JSON.parse(JSON.stringify(cats())),log:[]};store.active=n;record('created budget "'+n+'"');persist();render();}
+function renameBudget(){var old=store.active,n=prompt('Rename budget:',old);if(!n)return;n=n.trim();if(!n||n===old)return;if(store.budgets[n]){alert('Name taken.');return;}store.budgets[n]=store.budgets[old];delete store.budgets[old];store.active=n;record('renamed budget "'+old+'" \u2192 "'+n+'"');persist();render();}
+function deleteBudget(){if(Object.keys(store.budgets).length<=1){alert('Need at least one budget.');return;}if(!confirm('Delete budget "'+store.active+'"?'))return;delete store.budgets[store.active];store.active=Object.keys(store.budgets)[0];persist();render();}
+
+/* ---- categories ---- */
+function addCategory(){var n=prompt('New category name:');if(!n)return;n=n.trim();if(!n)return;if(catColor(n)!=='#9aa3b2'&&cats().some(function(c){return c.id===n;})){alert('That category exists.');return;}var col=PALETTE[cats().length%PALETTE.length];cats().push({id:n,color:col});record('added category "'+n+'"');persist();render();}
+
+/* ---- edit ---- */
 function edit(i,field,el){
   var raw;if(field==='amt'||field==='paid')raw=(+el.value.replace(/[^0-9.-]/g,'')||0);else if(field==='date')raw=parseDate(el.value);else raw=el.value;
-  var old=rows[i][field];if(String(old)===String(raw))return;
-  if(field==='paid'){var a=+rows[i].amt||0;if(raw>a)raw=a;if(raw<0)raw=0;}
-  rows[i][field]=raw;
+  var old=rows()[i][field];if(String(old)===String(raw))return;
+  if(field==='paid'){var a=+rows()[i].amt||0;if(raw>a)raw=a;if(raw<0)raw=0;}
+  rows()[i][field]=raw;
   var disp=(field==='amt'||field==='paid')?RS(old)+' \u2192 '+RS(raw):field==='date'?('"'+fmtDate(old)+'" \u2192 "'+fmtDate(raw)+'"'):('"'+old+'" \u2192 "'+raw+'"');
-  var fl=field==='paid'?'paid-so-far':field;
-  record('changed '+fl+' of "'+rows[i].item+'" \u2014 '+disp);persist();render();
+  record('changed '+(field==='paid'?'paid':field)+' of "'+rows()[i].item+'" \u2014 '+disp);persist();render();
 }
-function markPaid(i){rows[i].paid=+rows[i].amt||0;record('marked "'+rows[i].item+'" fully Paid ('+RS(rows[i].paid)+')');persist();render();}
-function markUnpaid(i){rows[i].paid=0;record('reset "'+rows[i].item+'" to Pending');persist();render();}
-function addRow(){rows.push({cat:filterCat!=='All'?filterCat:'Interior Work',item:'New payment',amt:0,paid:0,date:''});record('added a new payment');persist();render();}
-function delRow(i){record('deleted "'+rows[i].item+'"');rows.splice(i,1);persist();render();}
-function clearAll(){if(!confirm('Delete ALL rows and start with a blank tracker? The change log is kept.'))return;rows=[];record('cleared all rows');persist();render();flash('Cleared');}
+function editInst(i,field,el){var r=rows()[i];if(!r.inst)r.inst={on:true,per:0,count:0,done:0};var raw=(+el.value.replace(/[^0-9.-]/g,'')||0);if(field==='done'){if(raw<0)raw=0;if(raw>(+r.inst.count||0))raw=+r.inst.count||0;}r.inst[field]=raw;record('updated installment ('+field+') for "'+r.item+'"');persist();render();}
+function toggleInst(i){var r=rows()[i];if(!r.inst)r.inst={on:false,per:0,count:0,done:0};r.inst.on=!r.inst.on;record((r.inst.on?'enabled':'disabled')+' installment plan for "'+r.item+'"');persist();render();}
+function instStep(i,d){var r=rows()[i];if(!r.inst)return;var nd=(+r.inst.done||0)+d;if(nd<0)nd=0;if(nd>(+r.inst.count||0))nd=+r.inst.count||0;r.inst.done=nd;record('installments for "'+r.item+'" now '+nd+' of '+(r.inst.count||0)+' paid');persist();render();}
+function markPaid(i){var r=rows()[i];if(isInst(r)){r.inst.done=+r.inst.count||0;}else{r.paid=+r.amt||0;}record('marked "'+r.item+'" fully Paid');persist();render();}
+function markUnpaid(i){var r=rows()[i];if(isInst(r)){r.inst.done=0;}else{r.paid=0;}record('reset "'+r.item+'" to Pending');persist();render();}
+function addRow(){rows().push({cat:filterCat!=='All'?filterCat:cats()[0].id,item:'New payment',amt:0,paid:0,date:'',inst:{on:false,per:0,count:0,done:0}});record('added a new payment');persist();render();}
+function delRow(i){record('deleted "'+rows()[i].item+'"');rows().splice(i,1);persist();render();}
+function clearAll(){if(!confirm('Delete ALL rows in this budget? Categories and log are kept.'))return;cur().rows=[];record('cleared all rows');persist();render();flash('Cleared');}
 
-function sumTot(a){return a.reduce(function(x,r){return x+(+r.amt||0);},0);}
-function sumPaid(a){return a.reduce(function(x,r){return x+Math.min(+r.paid||0,+r.amt||0);},0);}
+function sumTot(a){return a.reduce(function(x,r){return x+rowTotal(r);},0);}
+function sumPaid(a){return a.reduce(function(x,r){return x+rowPaid(r);},0);}
 function flash(m){var f=document.getElementById('flash');f.textContent=m;f.classList.add('show');setTimeout(function(){f.classList.remove('show');},1500);}
-function doExport(){var blob=new Blob([JSON.stringify({rows:rows,log:log,exportedBy:who(),at:new Date().toISOString()},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='home-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
-function doImport(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(o.rows){rows=o.rows.map(function(x){if(x.paid===undefined)x.paid=(x.status==='Paid')?(+x.amt||0):0;return x;});if(o.log)log=o.log.concat(log);record('imported data from a file');persist();render();flash('Imported \u2713');}else alert('Unrecognised file.');}catch(err){alert('Could not read that file.');}};r.readAsText(f);e.target.value='';}
+
+/* ---- export ---- */
+function doExportJSON(){var blob=new Blob([JSON.stringify({store:store,exportedBy:who(),at:new Date().toISOString()},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='home-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+function doExportExcel(){
+  if(typeof XLSX==='undefined'){alert('Excel library still loading, try again in a moment.');return;}
+  var wb=XLSX.utils.book_new();
+  var head=['Category','Item','Date','Total','Paid','Remaining','Status','Installment?','Per Installment','Count','Paid Count'];
+  var aoa=[head];
+  rows().forEach(function(r){aoa.push([r.cat,r.item,fmtDate(r.date),rowTotal(r),rowPaid(r),remainOf(r),statusOf(r),isInst(r)?'Yes':'No',isInst(r)?(+r.inst.per||0):'',isInst(r)?(+r.inst.count||0):'',isInst(r)?(+r.inst.done||0):'']);});
+  aoa.push([]);aoa.push(['TOTAL','','',sumTot(rows()),sumPaid(rows()),sumTot(rows())-sumPaid(rows())]);
+  var ws=XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols']=[{wch:18},{wch:34},{wch:13},{wch:12},{wch:12},{wch:12},{wch:10},{wch:12},{wch:14},{wch:8},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws,'Payments');
+  var cat=[['Category','Total','Paid','Remaining']];
+  cats().forEach(function(c){var cr=rows().filter(function(r){return r.cat===c.id;});if(!cr.length)return;cat.push([c.id,sumTot(cr),sumPaid(cr),sumTot(cr)-sumPaid(cr)]);});
+  var ws2=XLSX.utils.aoa_to_sheet(cat);ws2['!cols']=[{wch:20},{wch:12},{wch:12},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws2,'By Category');
+  XLSX.writeFile(wb,(store.active.replace(/[^a-z0-9]/gi,'_'))+'-'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+function doImport(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(o.store&&o.store.budgets){for(var n in o.store.budgets){if(!o.store.budgets.hasOwnProperty(n))continue;var nm=store.budgets[n]?n+' (imported)':n;store.budgets[nm]=o.store.budgets[n];}store.active=o.store.active&&store.budgets[o.store.active]?o.store.active:Object.keys(store.budgets)[0];}else if(o.rows){store.budgets['Imported']={rows:o.rows,cats:defaultCats(),log:o.log||[]};store.active='Imported';}else{alert('Unrecognised file.');return;}record('imported from a file');persist();render();flash('Imported \u2713');}catch(err){alert('Could not read that file.');}};r.readAsText(f);e.target.value='';}
 function showLog(){viewLog=!viewLog;render();}
 
-function statusPill(i){var r=rows[i],st=statusOf(r);
-  return '<span class="status '+st+'">'+st+'</span>';}
-
-function quickBtns(i){var r=rows[i],st=statusOf(r);
-  if(st==='Paid')return '<button class="rowbtn" onclick="markUnpaid('+i+')" title="Reset to pending">&#8635;</button>';
-  return '<button class="rowbtn" onclick="markPaid('+i+')" title="Mark fully paid">&#10003;</button>';
+/* ---- column resize ---- */
+var COLS=['Category','Item','Date','Total','Paid','Remaining','Status','Act'];
+var defW=[150,260,120,110,150,110,100,90];
+function getW(){if(!colW||colW.length!==defW.length)colW=defW.slice();return colW;}
+function setupResizers(){
+  var ths=document.querySelectorAll('.desktop-table th');
+  ths.forEach(function(th,idx){
+    var rz=th.querySelector('.resizer');if(!rz)return;
+    rz.addEventListener('mousedown',function(e){
+      e.preventDefault();var startX=e.pageX,w=getW(),startW=w[idx];
+      function mm(ev){var nw=Math.max(50,startW+(ev.pageX-startX));w[idx]=nw;applyW();}
+      function mu(){document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);localStorage.setItem('het_colw',JSON.stringify(getW()));}
+      document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);
+    });
+  });
 }
+function applyW(){var w=getW();var cg=document.getElementById('colgroup');if(cg){var cols=cg.children;for(var i=0;i<cols.length;i++)cols[i].style.width=w[i]+'px';}}
+
+function statusPill(i){return '<span class="status '+statusOf(rows()[i])+'">'+statusOf(rows()[i])+'</span>';}
+function quickBtn(i){var st=statusOf(rows()[i]);if(st==='Paid')return '<button class="rowbtn" onclick="markUnpaid('+i+')" title="Reset">&#8635;</button>';return '<button class="rowbtn" onclick="markPaid('+i+')" title="Mark fully paid">&#10003;</button>';}
+function moneyIn(i,field,val){return '<span class="moneywrap"><input class="cell num" value="'+val+'" onchange="edit('+i+',\''+field+'\',this)"></span>';}
 
 function render(){
+  refreshBudgetSel();
   var app=document.getElementById('app');
   if(viewLog){
-    app.innerHTML='<div class="note">Change history, stored in <b>this browser only</b>. <a href="#" onclick="showLog();return false" style="color:var(--accent)">&larr; back to tracker</a></div>'+
+    var log=cur().log;
+    app.innerHTML='<div class="note">Change history for <b>'+store.active+'</b>, stored in <b>this browser only</b>. <a href="#" onclick="showLog();return false" style="color:var(--accent)">&larr; back</a></div>'+
       (log.length?log.map(function(e){return '<div style="padding:9px 4px;border-bottom:1px solid #22262f;font-size:13px"><span style="color:var(--muted);font-size:11px">'+fmtDate(e.when.slice(0,10))+' '+new Date(e.when).toLocaleTimeString()+'</span> &nbsp; <b style="color:var(--accent)">'+e.who+'</b> '+e.what+'</div>';}).join(''):'<div class="empty">No changes yet.</div>');
     return;
   }
-  var total=sumTot(rows),paid=sumPaid(rows),owed=total-paid;
-  var pct=total?Math.round(paid/total*100):0;
-
+  var total=sumTot(rows()),paid=sumPaid(rows()),owed=total-paid,pct=total?Math.round(paid/total*100):0;
   var s='<div class="grid">'+
     '<div class="stat"><div class="lbl">Total Cost</div><div class="val">'+RS(total)+'</div></div>'+
     '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(paid)+'</div></div>'+
     '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(owed)+'</div></div>'+
-    '<div class="stat"><div class="lbl">Progress</div><div class="val">'+pct+'%</div>'+
-      '<div class="bar"><span style="width:'+pct+'%;background:var(--paid)"></span><span style="width:'+(100-pct)+'%;background:var(--pendbg)"></span></div></div>'+
+    '<div class="stat"><div class="lbl">Progress</div><div class="val">'+pct+'%</div><div class="bar"><span style="width:'+pct+'%;background:var(--paid)"></span><span style="width:'+(100-pct)+'%;background:var(--pendbg)"></span></div></div>'+
     '</div>';
 
   s+='<div class="catwrap"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">By Category (paid vs total)</div>';
-  CATS.forEach(function(c){
-    var cr=rows.filter(function(r){return r.cat===c.id;});if(!cr.length)return;
-    var ct=sumTot(cr),cp=sumPaid(cr),cpct=ct?Math.round(cp/ct*100):0;
-    s+='<div class="catrow"><span class="dot" style="background:'+c.color+'"></span><span class="nm">'+c.id+'</span>'+
-       '<span class="track"><span style="width:'+cpct+'%;background:'+c.color+'"></span></span>'+
-       '<span class="amt">'+RS(cp)+' / '+RS(ct)+'</span></div>';
-  });
+  cats().forEach(function(c){var cr=rows().filter(function(r){return r.cat===c.id;});if(!cr.length)return;var ct=sumTot(cr),cp=sumPaid(cr),cpct=ct?Math.round(cp/ct*100):0;s+='<div class="catrow"><span class="dot" style="background:'+c.color+'"></span><span class="nm">'+c.id+'</span><span class="track"><span style="width:'+cpct+'%;background:'+c.color+'"></span></span><span class="amt">'+RS(cp)+' / '+RS(ct)+'</span></div>';});
   s+='</div>';
 
   s+='<div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">CATEGORY:</span>'+
-     ['All'].concat(CATS.map(function(c){return c.id;})).map(function(c){return '<span class="fbtn '+(filterCat===c?'active':'')+'" onclick="filterCat=\''+c.replace(/'/g,"\\'")+'\';render()">'+c+'</span>';}).join('')+'</div>';
+     ['All'].concat(cats().map(function(c){return c.id;})).map(function(c){return '<span class="fbtn '+(filterCat===c?'active':'')+'" onclick="filterCat=\''+(''+c).replace(/'/g,"\\'")+'\';render()">'+c+'</span>';}).join('')+
+     '<span class="fbtn" onclick="addCategory()" style="border-style:dashed">+ Category</span></div>';
   s+='<div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">STATUS:</span>'+
      ['All','Paid','Partial','Pending'].map(function(st){return '<span class="fbtn '+(filterStatus===st?'active':'')+'" onclick="filterStatus=\''+st+'\';render()">'+st+'</span>';}).join('')+'</div>';
 
-  var idx=rows.map(function(r,i){return i;}).filter(function(i){return (filterCat==='All'||rows[i].cat===filterCat)&&(filterStatus==='All'||statusOf(rows[i])===filterStatus);});
-  idx.sort(function(a,b){return (rows[a].date||'').localeCompare(rows[b].date||'');});
+  var idx=rows().map(function(r,i){return i;}).filter(function(i){return (filterCat==='All'||rows()[i].cat===filterCat)&&(filterStatus==='All'||statusOf(rows()[i])===filterStatus);});
+  idx.sort(function(a,b){return (rows()[a].date||'').localeCompare(rows()[b].date||'');});
 
-  /* ---- desktop table ---- */
-  var t='<div class="desktop-table"><table><tr><th>Category</th><th>Item</th><th>Date</th><th class="num">Total</th><th class="num">Paid</th><th class="num">Remaining</th><th>Status</th><th></th></tr>';
-  if(!idx.length) t+='<tr><td colspan="8"><div class="empty">No payments match this filter.</div></td></tr>';
+  var w=getW();
+  var t='<div class="desktop-table"><table><colgroup id="colgroup">'+w.map(function(x){return '<col style="width:'+x+'px">';}).join('')+'</colgroup><tr>'+
+    COLS.map(function(c,ci){return '<th'+((ci>=3&&ci<=5)?' class="num"':'')+'>'+(c==='Act'?'':c)+'<span class="resizer"></span></th>';}).join('')+'</tr>';
+  if(!idx.length)t+='<tr><td colspan="8"><div class="empty">No payments match this filter.</div></td></tr>';
   idx.forEach(function(i){
-    var r=rows[i];var opts=CATS.map(function(c){return '<option '+(c.id===r.cat?'selected':'')+'>'+c.id+'</option>';}).join('');
+    var r=rows()[i];var opts=cats().map(function(c){return '<option '+(c.id===r.cat?'selected':'')+'>'+c.id+'</option>';}).join('');
+    var instToggle='<div style="margin-top:2px"><label style="font-size:10px;color:var(--muted);cursor:pointer"><input type="checkbox" '+(isInst(r)?'checked':'')+' onchange="toggleInst('+i+')"> installment</label></div>';
+    var totalCell,paidCell;
+    if(isInst(r)){
+      totalCell='<div style="color:var(--muted);text-align:right">'+RS(rowTotal(r))+'</div><div class="inst">'+RS(r.inst.per||0)+' \u00D7 '+(r.inst.count||0)+'</div>';
+      paidCell='<div style="text-align:right">'+RS(rowPaid(r))+'</div><div class="inst instbtns"><button class="rowbtn" onclick="instStep('+i+',-1)">\u2212</button>'+(r.inst.done||0)+' of '+(r.inst.count||0)+'<button class="rowbtn" onclick="instStep('+i+',1)">+</button></div>';
+    }else{
+      totalCell=moneyIn(i,'amt',r.amt);
+      paidCell=moneyIn(i,'paid',r.paid||0);
+    }
     t+='<tr>'+
       '<td><span class="catpill"><span class="dot" style="background:'+catColor(r.cat)+'"></span><select class="cell" onchange="edit('+i+',\'cat\',this)">'+opts+'</select></span></td>'+
-      '<td><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this)"></td>'+
-      '<td><input class="cell" style="min-width:105px" value="'+fmtDate(r.date)+'" placeholder="dd-mmm-yyyy" onchange="edit('+i+',\'date\',this)"></td>'+
-      '<td class="num"><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this)"></td>'+
-      '<td class="num"><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this)"></td>'+
+      '<td><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this)">'+instToggle+
+        (isInst(r)?'<div class="instbox"><div class="lbl">Installment plan</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px"><span>Per '+moneyInInline(i,'per',r.inst.per||0)+'</span><span>Count <input class="cell num" style="width:60px;display:inline-block" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this)"></span></div></div>':'')+'</td>'+
+      '<td><input class="cell" value="'+fmtDate(r.date)+'" placeholder="dd-mmm-yyyy" onchange="edit('+i+',\'date\',this)"></td>'+
+      '<td class="num">'+totalCell+'</td>'+
+      '<td class="num">'+paidCell+'</td>'+
       '<td class="num" style="color:var(--muted)">'+RS(remainOf(r))+'</td>'+
       '<td>'+statusPill(i)+'</td>'+
-      '<td style="white-space:nowrap">'+quickBtns(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></td></tr>';
+      '<td style="white-space:nowrap">'+quickBtn(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></td></tr>';
   });
-  var ft=sumTot(idx.map(function(i){return rows[i];})),fp=sumPaid(idx.map(function(i){return rows[i];}));
-  t+='<tr class="totalrow"><td></td><td>Showing '+idx.length+' item(s)</td><td></td><td class="num">'+RS(ft)+'</td><td class="num">'+RS(fp)+'</td><td class="num">'+RS(ft-fp)+'</td><td></td><td></td></tr>';
-  t+='</table></div>';
+  var ft=sumTot(idx.map(function(i){return rows()[i];})),fp=sumPaid(idx.map(function(i){return rows()[i];}));
+  t+='<tr class="totalrow"><td></td><td>Showing '+idx.length+' item(s)</td><td></td><td class="num">'+RS(ft)+'</td><td class="num">'+RS(fp)+'</td><td class="num">'+RS(ft-fp)+'</td><td></td><td></td></tr></table></div>';
 
-  /* ---- mobile cards ---- */
+  /* mobile cards */
   var m='<div class="cards">';
-  if(!idx.length) m+='<div class="empty">No payments match this filter.</div>';
+  if(!idx.length)m+='<div class="empty">No payments match this filter.</div>';
   idx.forEach(function(i){
-    var r=rows[i];var opts=CATS.map(function(c){return '<option '+(c.id===r.cat?'selected':'')+'>'+c.id+'</option>';}).join('');
-    m+='<div class="pcard">'+
-      '<div class="top"><div style="flex:1"><span class="catpill"><span class="dot" style="background:'+catColor(r.cat)+'"></span><span style="font-size:11px;color:var(--muted)">'+r.cat+'</span></span></div>'+statusPill(i)+'</div>'+
+    var r=rows()[i];var opts=cats().map(function(c){return '<option '+(c.id===r.cat?'selected':'')+'>'+c.id+'</option>';}).join('');
+    m+='<div class="pcard"><div class="top"><div style="flex:1"><span class="catpill"><span class="dot" style="background:'+catColor(r.cat)+'"></span><span style="font-size:11px;color:var(--muted)">'+r.cat+'</span></span></div>'+statusPill(i)+'</div>'+
       '<div class="fld"><label>Item</label><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this)"></div>'+
-      '<div class="two"><div class="fld"><label>Category</label><select class="cell" onchange="edit('+i+',\'cat\',this)">'+opts+'</select></div>'+
-        '<div class="fld"><label>Date</label><input class="cell" value="'+fmtDate(r.date)+'" placeholder="dd-mmm-yyyy" onchange="edit('+i+',\'date\',this)"></div></div>'+
-      '<div class="two"><div class="fld"><label>Total</label><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this)"></div>'+
-        '<div class="fld"><label>Paid so far</label><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this)"></div></div>'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">'+
-        '<span class="remain">Remaining: <b style="color:var(--ink)">'+RS(remainOf(r))+'</b></span>'+
-        '<span>'+quickBtns(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715 delete</button></span></div>'+
-      '</div>';
+      '<div class="two"><div class="fld"><label>Category</label><select class="cell" onchange="edit('+i+',\'cat\',this)">'+opts+'</select></div><div class="fld"><label>Date</label><input class="cell" value="'+fmtDate(r.date)+'" placeholder="dd-mmm-yyyy" onchange="edit('+i+',\'date\',this)"></div></div>'+
+      '<div class="fld"><label><input type="checkbox" '+(isInst(r)?'checked':'')+' onchange="toggleInst('+i+')"> Installment plan</label></div>'+
+      (isInst(r)?
+        '<div class="instbox"><div class="lbl">Installment plan</div><div class="two"><div class="fld"><label>Per installment</label><span class="moneywrap"><input class="cell num" value="'+(r.inst.per||0)+'" onchange="editInst('+i+',\'per\',this)"></span></div><div class="fld"><label>No. of installments</label><input class="cell num" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="inst">Total '+RS(rowTotal(r))+' \u00B7 Paid '+RS(rowPaid(r))+'</span><span class="instbtns"><button class="rowbtn" onclick="instStep('+i+',-1)">\u2212</button> <b style="color:var(--part)">'+(r.inst.done||0)+' of '+(r.inst.count||0)+'</b> <button class="rowbtn" onclick="instStep('+i+',1)">+</button></span></div></div>'
+        :
+        '<div class="two"><div class="fld"><label>Total</label><span class="moneywrap"><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this)"></span></div><div class="fld"><label>Paid so far</label><span class="moneywrap"><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this)"></span></div></div>')+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px"><span class="inst" style="color:var(--muted)">Remaining: <b style="color:var(--ink)">'+RS(remainOf(r))+'</b></span><span>'+quickBtn(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></span></div></div>';
   });
   m+='</div>';
 
-  s+=t+m+'<div class="addrow"><button onclick="addRow()">+ Add payment</button></div>';
-  s+='<div class="note">Type how much you\u2019ve <b>Paid so far</b> \u2014 remaining and status (Paid / Partial / Pending) update automatically, and the dashboard counts the actual amount paid. Tap &#10003; to mark a row fully paid. Dates read as dd-mmm-yyyy. Passcode-gate is cosmetic on a static site.</div>';
+  s+=t+m+'<div class="addrow"><button onclick="addRow()">+ Add payment</button><button onclick="addCategory()">+ New category</button></div>';
+  s+='<div class="note">Tick <b>installment</b> on a row to enter per-installment amount &amp; count \u2014 total auto-calculates and you track it with the <b>&minus; / +</b> counter (e.g. 3 of 12 paid). Drag the edge of any column header to resize (desktop). Export to <b>Excel</b> or JSON up top. Passcode-gate is cosmetic on a static site.</div>';
 
   app.innerHTML=s;
+  applyW();setupResizers();
 }
+function moneyInInline(i,field,val){return '<span class="moneywrap" style="display:inline-block;width:100px"><input class="cell num" value="'+val+'" onchange="editInst('+i+',\''+field+'\',this)"></span>';}
 render();
 </script>
 </body>
