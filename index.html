@@ -4,14 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home Expense Tracker</title>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('het_theme')||'dark');}catch(e){}</script>
 <style>
   :root{
     --bg:#0f1115;--panel:#171a21;--panel2:#1e222b;--line:#2a2f3a;--ink:#e8eaed;--muted:#9aa3b2;
     --accent:#6ea8fe;--accent2:#4f7ce0;--paid:#2ea36b;--paidbg:#12291f;--part:#e0b23a;--partbg:#2b2610;--pend:#d0863a;--pendbg:#2b2013;--danger:#e5484d;--chip:#242a35;
+    --hdr1:#1a1e27;--hdr2:#141821;--rowline:#22262f;--noteBg:#1b2330;--noteLine:#2b3a52;--noteInk:#b9cdf0;
+    --paidLine:#1f5c3f;--partLine:#5c5320;--pendLine:#5c4620;
+  }
+  html[data-theme="light"]{
+    --bg:#f4f6fa;--panel:#ffffff;--panel2:#ffffff;--line:#d9dee7;--ink:#1c2430;--muted:#5f6b7c;
+    --accent:#2f6fed;--accent2:#2f6fed;--paid:#1a8a52;--paidbg:#e5f5ec;--part:#a9791a;--partbg:#faf1d8;--pend:#b8631f;--pendbg:#fbeada;--danger:#d33;--chip:#eef1f6;
+    --hdr1:#ffffff;--hdr2:#f0f3f8;--rowline:#eaecf1;--noteBg:#eaf1ff;--noteLine:#c5d8f5;--noteInk:#2f5aa8;
+    --paidLine:#9bd7b4;--partLine:#e3cf8a;--pendLine:#e6bf95;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
-  header{background:linear-gradient(180deg,#1a1e27,#141821);border-bottom:1px solid var(--line);padding:14px 16px;position:sticky;top:0;z-index:20}
+  header{background:linear-gradient(180deg,var(--hdr1),var(--hdr2));border-bottom:1px solid var(--line);padding:14px 16px;position:sticky;top:0;z-index:20}
   .title{font-size:20px;font-weight:bold}
   .sub{color:var(--muted);font-size:12px;margin-top:2px}
   .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
@@ -44,7 +53,7 @@
   table{width:100%;border-collapse:collapse;table-layout:fixed}
   th{position:relative;text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:8px 8px;border-bottom:1px solid var(--line);overflow:hidden}
   th.num,td.num{text-align:right}
-  td{padding:3px 6px;border-bottom:1px solid #22262f;vertical-align:middle;overflow:hidden}
+  td{padding:3px 6px;border-bottom:1px solid var(--rowline);vertical-align:middle;overflow:hidden}
   .resizer{position:absolute;right:0;top:0;width:8px;height:100%;cursor:col-resize;user-select:none}
   .resizer:hover{background:var(--accent)}
   .cell{background:transparent;border:1px solid transparent;color:var(--ink);border-radius:6px;padding:7px 8px;width:100%}
@@ -56,16 +65,16 @@
   .moneywrap .cell{padding-left:20px}
   .catpill{display:inline-flex;align-items:center;gap:6px}
   .status{border-radius:20px;padding:5px 11px;border:1px solid var(--line);font-weight:bold;font-size:12px;white-space:nowrap;display:inline-block;text-align:center}
-  .status.Paid{background:var(--paidbg);color:var(--paid);border-color:#1f5c3f}
-  .status.Partial{background:var(--partbg);color:var(--part);border-color:#5c5320}
-  .status.Pending{background:var(--pendbg);color:var(--pend);border-color:#5c4620}
+  .status.Paid{background:var(--paidbg);color:var(--paid);border-color:var(--paidLine)}
+  .status.Partial{background:var(--partbg);color:var(--part);border-color:var(--partLine)}
+  .status.Pending{background:var(--pendbg);color:var(--pend);border-color:var(--pendLine)}
   .inst{font-size:11px;color:var(--part);white-space:nowrap;margin-top:3px}
   .instbtns button{padding:2px 8px;font-size:13px;margin:0 1px}
   .rowbtn{opacity:.45;padding:4px 8px;font-size:13px}tr:hover .rowbtn{opacity:1}
   .totalrow td{font-weight:bold;border-top:2px solid var(--line);padding-top:10px}
   .addrow{margin:12px 0 4px;display:flex;gap:8px;flex-wrap:wrap}.addrow button{color:var(--muted)}
   .flash{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent2);color:#fff;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .3s;z-index:50}.flash.show{opacity:1}
-  .note{background:#1b2330;border:1px solid #2b3a52;color:#b9cdf0;border-radius:8px;padding:10px 12px;font-size:12px;margin:16px 0 4px}
+  .note{background:var(--noteBg);border:1px solid var(--noteLine);color:var(--noteInk);border-radius:8px;padding:10px 12px;font-size:12px;margin:16px 0 4px}
   .empty{color:var(--muted);padding:24px;text-align:center}
   .cards{display:none}
   .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
@@ -74,7 +83,7 @@
   .pcard .fld label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
   .pcard .cell{background:var(--panel);border:1px solid var(--line)}
   .pcard .two{display:flex;gap:10px}.pcard .two>div{flex:1}
-  .instbox{background:var(--partbg);border:1px solid #5c5320;border-radius:8px;padding:10px;margin:8px 0}
+  .instbox{background:var(--partbg);border:1px solid var(--partLine);border-radius:8px;padding:10px;margin:8px 0}
   .bcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
   .bhead{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
   .bhead:hover{background:var(--panel)}
@@ -88,6 +97,13 @@
   .bstats{display:flex;gap:16px;flex-wrap:wrap;padding:10px 0;color:var(--muted);font-size:13px}
   .bstats b{color:var(--ink)}
   .bbody .pcard{background:var(--panel);}
+  .ctbl{width:100%;border-collapse:collapse;font-size:13px}
+  .ctbl th{padding:6px 6px;font-size:10px}
+  .ctbl td{padding:2px 5px}
+  .ctbl tr[draggable=true]{cursor:grab}
+  .ctbl tr[draggable=true]:active{cursor:grabbing}
+  .draghandle{color:var(--muted);white-space:nowrap;font-size:12px}
+  .ctbl .cell{padding:5px 7px}
   @media(max-width:820px){.bmini{display:none}.bamt{min-width:0}}
   .instbox .lbl{color:var(--part);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:bold}
   #lock{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;align-items:center;justify-content:center}
@@ -133,6 +149,7 @@
     <button onclick="showLog()">&#128339; Log</button>
     <button onclick="window.print()">&#128424;&#65039;</button>
     <button class="danger" onclick="clearAll()">Clear</button>
+    <button id="themeBtn" onclick="toggleTheme()" title="Switch light/dark">&#9790;</button>
     <button class="danger" onclick="lock()">Lock</button>
   </div>
 </header>
@@ -143,6 +160,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 var PASSCODE="Shree";
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);var b=document.getElementById('themeBtn');if(b)b.innerHTML=(t==='light')?'\u2600':'\u263E';}
+function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';var next=cur==='light'?'dark':'light';localStorage.setItem('het_theme',next);applyTheme(next);}
+applyTheme(localStorage.getItem('het_theme')||'dark');
 var RS=function(n){return '\u20B9'+(Math.round(+n||0)).toLocaleString('en-IN');};
 var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmtDate(iso){if(!iso)return '';var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso);if(!m)return iso;return m[3]+'-'+MON[(+m[2])-1]+'-'+m[1];}
@@ -241,6 +261,11 @@ function markUnpaid(i,bn){var r=R(bn)[i];if(isInst(r)){r.inst.done=0;}else{r.pai
 function addRow(bn){var tgt=bn||(isAll()?null:store.active);if(!tgt){alert('Pick a specific budget to add a payment.');return;}var b=store.budgets[tgt];b.rows.push({cat:(!bn&&filterCat!=='All')?filterCat:b.cats[0].id,item:'New payment',amt:0,paid:0,date:'',inst:{on:false,per:0,count:0,done:0}});recordIn(tgt,'added a new payment');persist();render();}
 function delRow(i,bn){var arr=R(bn);recordIn(bn,'deleted "'+arr[i].item+'"');arr.splice(i,1);persist();render();}
 function clearAll(){if(isAll()){alert('Pick a specific budget to clear.');return;}if(!confirm('Delete ALL rows in this budget? Categories and log are kept.'))return;cur().rows=[];record('cleared all rows');persist();render();flash('Cleared');}
+function moveRow(i,dir,bn){var arr=R(bn);var j=i+dir;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t;recordIn(bn,'moved "'+arr[j].item+'"');persist();render();}
+var dragSrc=null,dragBn=null;
+function dragStart(ev,i,bn){dragSrc=i;dragBn=bn||'';ev.dataTransfer.effectAllowed='move';try{ev.dataTransfer.setData('text/plain',String(i));}catch(e){}}
+function dragOver(ev){ev.preventDefault();ev.dataTransfer.dropEffect='move';}
+function dropRow(ev,i,bn){ev.preventDefault();var sb=dragBn||'';var tb=bn||'';if(sb!==tb||dragSrc===null||dragSrc===i){dragSrc=null;return;}var arr=R(bn);var item=arr.splice(dragSrc,1)[0];arr.splice(i,0,item);recordIn(bn,'reordered "'+item.item+'"');dragSrc=null;persist();render();}
 
 function sumTot(a){return a.reduce(function(x,r){return x+rowTotal(r);},0);}
 function sumPaid(a){return a.reduce(function(x,r){return x+rowPaid(r);},0);}
@@ -321,6 +346,39 @@ function pcardRowHTML(i,r,bn){
 function bnEsc(bn){return (''+bn).replace(/'/g,"\\'");}
 function toggleCard(bn){expanded[bn]=!expanded[bn];render();}
 
+function moveCell(i,bn,n){
+  return '<span style="white-space:nowrap"><button class="rowbtn" '+(i===0?'disabled style="opacity:.15"':'')+' onclick="moveRow('+i+',-1,\''+bnEsc(bn)+'\')" title="Move up">\u25B2</button><button class="rowbtn" '+(i===n-1?'disabled style="opacity:.15"':'')+' onclick="moveRow('+i+',1,\''+bnEsc(bn)+'\')" title="Move down">\u25BC</button></span>';
+}
+function compactTableHTML(bn){
+  var br=store.budgets[bn].rows;var n=br.length;
+  var t='<div style="overflow-x:auto"><table class="ctbl"><tr><th style="width:34px"></th><th>Category</th><th>Item</th><th>Date</th><th class="num">Total</th><th class="num">Paid</th><th class="num">Remaining</th><th>Status</th><th style="width:70px"></th></tr>';
+  br.forEach(function(r,i){
+    var opts=(store.budgets[bn].cats).map(function(c){return '<option '+(c.id===r.cat?'selected':'')+'>'+c.id+'</option>';}).join('');
+    var qb=(statusOf(r)==='Paid')?'<button class="rowbtn" onclick="markUnpaid('+i+',\''+bnEsc(bn)+'\')" title="Reset">&#8635;</button>':'<button class="rowbtn" onclick="markPaid('+i+',\''+bnEsc(bn)+'\')" title="Mark fully paid">&#10003;</button>';
+    var totalCell,paidCell,itemExtra='';
+    if(isInst(r)){
+      totalCell='<div style="color:var(--muted);text-align:right">'+RS(rowTotal(r))+'</div><div class="inst">'+RS(r.inst.per||0)+' \u00D7 '+(r.inst.count||0)+'</div>';
+      paidCell='<div style="text-align:right">'+RS(rowPaid(r))+'</div><div class="inst instbtns"><button class="rowbtn" onclick="instStep('+i+',-1,\''+bnEsc(bn)+'\')">\u2212</button>'+(r.inst.done||0)+' of '+(r.inst.count||0)+'<button class="rowbtn" onclick="instStep('+i+',1,\''+bnEsc(bn)+'\')">+</button></div>';
+      itemExtra='<div class="instbox" style="margin:4px 0 0"><div class="lbl">Installment</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px"><span>Per <span class="moneywrap" style="display:inline-block;width:90px"><input class="cell num" value="'+(r.inst.per||0)+'" onchange="editInst('+i+',\'per\',this,\''+bnEsc(bn)+'\')"></span></span><span>Count <input class="cell num" style="width:56px;display:inline-block" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this,\''+bnEsc(bn)+'\')"></span></div></div>';
+    }else{
+      totalCell='<span class="moneywrap"><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this,\''+bnEsc(bn)+'\')"></span>';
+      paidCell='<span class="moneywrap"><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this,\''+bnEsc(bn)+'\')"></span>';
+    }
+    t+='<tr draggable="true" ondragstart="dragStart(event,'+i+',\''+bnEsc(bn)+'\')" ondragover="dragOver(event)" ondrop="dropRow(event,'+i+',\''+bnEsc(bn)+'\')">'+
+      '<td class="draghandle" title="Drag to reorder">\u2630'+moveCell(i,bn,n)+'</td>'+
+      '<td><span class="catpill"><span class="dot" style="background:'+budgetCatColor(bn,r.cat)+'"></span><select class="cell" onchange="edit('+i+',\'cat\',this,\''+bnEsc(bn)+'\')">'+opts+'</select></span></td>'+
+      '<td><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this,\''+bnEsc(bn)+'\')"><div style="margin-top:2px"><label style="font-size:10px;color:var(--muted);cursor:pointer"><input type="checkbox" '+(isInst(r)?'checked':'')+' onchange="toggleInst('+i+',\''+bnEsc(bn)+'\')"> installment</label></div>'+itemExtra+'</td>'+
+      '<td><input class="cell" style="min-width:100px" value="'+fmtDate(r.date)+'" placeholder="dd-mmm-yyyy" onchange="edit('+i+',\'date\',this,\''+bnEsc(bn)+'\')"></td>'+
+      '<td class="num">'+totalCell+'</td>'+
+      '<td class="num">'+paidCell+'</td>'+
+      '<td class="num" style="color:var(--muted)">'+RS(remainOf(r))+'</td>'+
+      '<td><span class="status '+statusOf(r)+'">'+statusOf(r)+'</span></td>'+
+      '<td style="white-space:nowrap">'+qb+'<button class="rowbtn danger" onclick="delRow('+i+',\''+bnEsc(bn)+'\')">\u2715</button></td></tr>';
+  });
+  t+='</table></div>';
+  return t;
+}
+
 function renderAll(app){
   var all=allRows();
   var total=all.reduce(function(x,o){return x+rowTotal(o.r);},0);
@@ -355,8 +413,7 @@ function renderAll(app){
          '<div class="bstats"><span>Total <b>'+RS(ct)+'</b></span><span style="color:var(--paid)">Paid <b>'+RS(cp)+'</b></span><span style="color:var(--pend)">Owed <b>'+RS(ct-cp)+'</b></span><span>'+cpct+'%</span></div>';
       if(!br.length) s+='<div class="empty">No payments yet.</div>';
       else{
-        var order=br.map(function(r,i){return i;}).sort(function(a,c){return (br[a].date||'').localeCompare(br[c].date||'');});
-        order.forEach(function(i){s+=pcardRowHTML(i,br[i],bn);});
+        s+=compactTableHTML(bn);
       }
       s+='<div class="addrow"><button onclick="addRow(\''+bnEsc(bn)+'\')">+ Add payment to '+bn+'</button><button onclick="switchBudget(\''+bnEsc(bn)+'\')">Open '+bn+' \u2192</button></div>';
       s+='</div>';
@@ -364,7 +421,7 @@ function renderAll(app){
     s+='</div>';
   });
 
-  s+='<div class="note">Each budget is a card \u2014 click a header to expand and edit its rows right here. Grand totals update live across all budgets. Excel/JSON export includes every budget.</div>';
+  s+='<div class="note">Each budget is a card \u2014 expand to edit its items as compact rows. Reorder with drag or the <b>\u25B2 \u25BC</b> arrows. Grand totals update live. Excel/JSON export includes every budget.</div>';
   app.innerHTML=s;
 }
 function expandAll(on){Object.keys(store.budgets).forEach(function(bn){expanded[bn]=on;});render();}
@@ -379,7 +436,7 @@ function render(){
   if(viewLog){
     var log=cur().log;
     app.innerHTML='<div class="note">Change history for <b>'+store.active+'</b>, stored in <b>this browser only</b>. <a href="#" onclick="showLog();return false" style="color:var(--accent)">&larr; back</a></div>'+
-      (log.length?log.map(function(e){return '<div style="padding:9px 4px;border-bottom:1px solid #22262f;font-size:13px"><span style="color:var(--muted);font-size:11px">'+fmtDate(e.when.slice(0,10))+' '+new Date(e.when).toLocaleTimeString()+'</span> &nbsp; <b style="color:var(--accent)">'+e.who+'</b> '+e.what+'</div>';}).join(''):'<div class="empty">No changes yet.</div>');
+      (log.length?log.map(function(e){return '<div style="padding:9px 4px;border-bottom:1px solid var(--rowline);font-size:13px"><span style="color:var(--muted);font-size:11px">'+fmtDate(e.when.slice(0,10))+' '+new Date(e.when).toLocaleTimeString()+'</span> &nbsp; <b style="color:var(--accent)">'+e.who+'</b> '+e.what+'</div>';}).join(''):'<div class="empty">No changes yet.</div>');
     return;
   }
   var total=sumTot(rows()),paid=sumPaid(rows()),owed=total-paid,pct=total?Math.round(paid/total*100):0;
@@ -401,7 +458,7 @@ function render(){
      ['All','Paid','Partial','Pending'].map(function(st){return '<span class="fbtn '+(filterStatus===st?'active':'')+'" onclick="filterStatus=\''+st+'\';render()">'+st+'</span>';}).join('')+'</div>';
 
   var idx=rows().map(function(r,i){return i;}).filter(function(i){return (filterCat==='All'||rows()[i].cat===filterCat)&&(filterStatus==='All'||statusOf(rows()[i])===filterStatus);});
-  idx.sort(function(a,b){return (rows()[a].date||'').localeCompare(rows()[b].date||'');});
+  var unfiltered=(filterCat==='All'&&filterStatus==='All');
 
   var w=getW();
   var t='<div class="desktop-table"><table><colgroup id="colgroup">'+w.map(function(x){return '<col style="width:'+x+'px">';}).join('')+'</colgroup><tr>'+
@@ -418,7 +475,7 @@ function render(){
       totalCell=moneyIn(i,'amt',r.amt);
       paidCell=moneyIn(i,'paid',r.paid||0);
     }
-    t+='<tr>'+
+    t+='<tr'+(unfiltered?' draggable="true" ondragstart="dragStart(event,'+i+',\'\')" ondragover="dragOver(event)" ondrop="dropRow(event,'+i+',\'\')"':'')+'>'+
       '<td><span class="catpill"><span class="dot" style="background:'+catColor(r.cat)+'"></span><select class="cell" onchange="edit('+i+',\'cat\',this)">'+opts+'</select></span></td>'+
       '<td><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this)">'+instToggle+
         (isInst(r)?'<div class="instbox"><div class="lbl">Installment plan</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px"><span>Per '+moneyInInline(i,'per',r.inst.per||0)+'</span><span>Count <input class="cell num" style="width:60px;display:inline-block" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this)"></span></div></div>':'')+'</td>'+
@@ -427,7 +484,7 @@ function render(){
       '<td class="num">'+paidCell+'</td>'+
       '<td class="num" style="color:var(--muted)">'+RS(remainOf(r))+'</td>'+
       '<td>'+statusPill(i)+'</td>'+
-      '<td style="white-space:nowrap">'+quickBtn(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></td></tr>';
+      '<td style="white-space:nowrap"><button class="rowbtn" onclick="moveRow('+i+',-1,\'\')" title="Move up">\u25B2</button><button class="rowbtn" onclick="moveRow('+i+',1,\'\')" title="Move down">\u25BC</button>'+quickBtn(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></td></tr>';
   });
   var ft=sumTot(idx.map(function(i){return rows()[i];})),fp=sumPaid(idx.map(function(i){return rows()[i];}));
   t+='<tr class="totalrow"><td></td><td>Showing '+idx.length+' item(s)</td><td></td><td class="num">'+RS(ft)+'</td><td class="num">'+RS(fp)+'</td><td class="num">'+RS(ft-fp)+'</td><td></td><td></td></tr></table></div>';
@@ -445,12 +502,12 @@ function render(){
         '<div class="instbox"><div class="lbl">Installment plan</div><div class="two"><div class="fld"><label>Per installment</label><span class="moneywrap"><input class="cell num" value="'+(r.inst.per||0)+'" onchange="editInst('+i+',\'per\',this)"></span></div><div class="fld"><label>No. of installments</label><input class="cell num" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="inst">Total '+RS(rowTotal(r))+' \u00B7 Paid '+RS(rowPaid(r))+'</span><span class="instbtns"><button class="rowbtn" onclick="instStep('+i+',-1)">\u2212</button> <b style="color:var(--part)">'+(r.inst.done||0)+' of '+(r.inst.count||0)+'</b> <button class="rowbtn" onclick="instStep('+i+',1)">+</button></span></div></div>'
         :
         '<div class="two"><div class="fld"><label>Total</label><span class="moneywrap"><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this)"></span></div><div class="fld"><label>Paid so far</label><span class="moneywrap"><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this)"></span></div></div>')+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px"><span class="inst" style="color:var(--muted)">Remaining: <b style="color:var(--ink)">'+RS(remainOf(r))+'</b></span><span>'+quickBtn(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></span></div></div>';
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px"><span class="inst" style="color:var(--muted)">Remaining: <b style="color:var(--ink)">'+RS(remainOf(r))+'</b></span><span><button class="rowbtn" onclick="moveRow('+i+',-1,\'\')" title="Move up">\u25B2</button><button class="rowbtn" onclick="moveRow('+i+',1,\'\')" title="Move down">\u25BC</button>'+quickBtn(i)+'<button class="rowbtn danger" onclick="delRow('+i+')">\u2715</button></span></div></div>';
   });
   m+='</div>';
 
   s+=t+m+'<div class="addrow"><button onclick="addRow()">+ Add payment</button><button onclick="addCategory()">+ New category</button></div>';
-  s+='<div class="note">Tick <b>installment</b> on a row to enter per-installment amount &amp; count \u2014 total auto-calculates and you track it with the <b>&minus; / +</b> counter (e.g. 3 of 12 paid). Drag the edge of any column header to resize (desktop). Export to <b>Excel</b> or JSON up top. Passcode-gate is cosmetic on a static site.</div>';
+  s+='<div class="note">Reorder items by dragging a row (when no filter is active) or with the <b>\u25B2 \u25BC</b> arrows. Tick <b>installment</b> for per-installment amount &amp; count. Drag a column-header edge to resize (desktop). Export to <b>Excel</b> or JSON up top.</div>';
 
   app.innerHTML=s;
   applyW();setupResizers();
