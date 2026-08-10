@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark"><head>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home Expense Tracker</title>
@@ -103,6 +104,14 @@
   .ctbl tr[draggable=true]:active{cursor:grabbing}
   .draghandle{color:var(--muted);white-space:nowrap;font-size:12px}
   .ctbl .cell{padding:5px 7px}
+  /* view-only mode: hide edit affordances */
+  body.viewonly .editonly{display:none !important}
+  body.viewonly .cell{pointer-events:none;border-color:transparent !important;background:transparent !important;-webkit-appearance:none;appearance:none}
+  body.viewonly select.cell{opacity:1}
+  body.viewonly .status{cursor:default}
+  body.viewonly .rowbtn,body.viewonly .instbtns,body.viewonly .resizer,body.viewonly .draghandle,body.viewonly .moneywrap input{pointer-events:none}
+  body.viewonly .fbtn.addcat{display:none}
+  body.viewonly tr[draggable=true]{cursor:default}
   @media(max-width:820px){.bmini{display:none}.bamt{min-width:0}}
   .instbox .lbl{color:var(--part);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:bold}
   #lock{position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;align-items:center;justify-content:center}
@@ -122,45 +131,47 @@
 </head>
 <body>
 
-<div id="lock" style="display: none;"><div class="lockbox">
-  <h1>🔒 Home Expense Tracker</h1>
-  <p>Enter the shared passcode to continue.</p>
+<div id="lock"><div class="lockbox">
+  <h1>&#128274; Home Expense Tracker</h1>
+  <p>Enter your passcode.<br><span style="font-size:11px">View or edit access depends on the code.</span></p>
   <input id="pass" type="password" placeholder="Passcode" onkeydown="if(event.key==='Enter')unlock()">
   <button class="primary" onclick="unlock()">Unlock</button>
   <div class="lockerr" id="lockerr"></div>
 </div></div>
 
 <header>
-  <div class="title">🏠 Home Expense Tracker</div>
-  <div class="sub" id="subline">Credit Card · partial &amp; installment plans</div>
+  <div class="title">&#127968; Home Expense Tracker</div>
+  <div class="sub" id="subline">Every payment in one place &middot; partial &amp; installment plans</div>
   <div class="toolbar">
-    <select class="budgetsel" id="budgetsel" onchange="switchBudget(this.value)"><option>Home Improvements</option><option selected="">Credit Card</option><option style="font-weight:bold">⊞ All Budgets</option></select>
-    <button onclick="addBudget()">＋ Budget</button>
-    <button onclick="renameBudget()">✎</button>
-    <button class="danger" onclick="deleteBudget()">🗑</button>
+    <select class="budgetsel" id="budgetsel" onchange="switchBudget(this.value)"></select>
+    <button class="editonly" onclick="addBudget()">&#65291; Budget</button>
+    <button class="editonly" onclick="renameBudget()">&#9998;</button>
+    <button class="danger editonly" onclick="deleteBudget()">&#128465;</button>
     <span style="flex:1"></span>
-    <input id="who" class="who" placeholder="Your name (for log)">
-    <button class="primary" onclick="save()">💾 Save</button>
+    <input id="who" class="who editonly" placeholder="Your name (for log)">
+    <button class="primary editonly" onclick="save()">&#128190; Save</button>
     <button onclick="doExportJSON()">JSON</button>
-    <button onclick="doExportExcel()">📊 Excel</button>
-    <button onclick="document.getElementById('imp').click()">⬆️</button>
+    <button onclick="doExportExcel()">&#128202; Excel</button>
+    <button class="editonly" onclick="document.getElementById('imp').click()">&#11014;&#65039;</button>
     <input type="file" id="imp" accept=".json" style="display:none" onchange="doImport(event)">
-    <button onclick="showLog()">🕓 Log</button>
-    <button onclick="window.print()">🖨️</button>
-    <button onclick="saveAsMaster()" title="Bake current data into a downloadable index.html">⭐ Save as master</button>
-    <button onclick="resetToMaster()" title="Reload the owner's master data">↻ Reset to master</button>
-    <button class="danger" onclick="clearAll()">Clear</button>
-    <button id="themeBtn" onclick="toggleTheme()" title="Switch light/dark">☾</button>
+    <button onclick="showLog()">&#128339; Log</button>
+    <button onclick="window.print()">&#128424;&#65039;</button>
+    <button id="dljson" class="editonly" onclick="downloadData()" title="Download data.json to upload to GitHub">&#11015;&#65039; data.json</button>
+    <button class="danger editonly" onclick="clearAll()">Clear</button>
+    <button id="themeBtn" onclick="toggleTheme()" title="Switch light/dark">&#9790;</button>
     <button class="danger" onclick="lock()">Lock</button>
   </div>
 </header>
 
-<div class="wrap" id="app"><div class="grid"><div class="stat"><div class="lbl">Total Cost</div><div class="val">₹20,00,000</div></div><div class="stat paid"><div class="lbl">Paid so far</div><div class="val">₹0</div></div><div class="stat pend"><div class="lbl">Still Owed</div><div class="val">₹20,00,000</div></div><div class="stat"><div class="lbl">Progress</div><div class="val">0%</div><div class="bar"><span style="width:0%;background:var(--paid)"></span><span style="width:100%;background:var(--pendbg)"></span></div></div></div><div class="catwrap"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">By Category (paid vs total)</div><div class="catrow"><span class="dot" style="background:#f7c948"></span><span class="nm">Creditcards</span><span class="track"><span style="width:0%;background:#f7c948"></span></span><span class="amt">₹0 / ₹20,00,000</span></div></div><div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">CATEGORY:</span><span class="fbtn active" onclick="filterCat='All';render()">All</span><span class="fbtn " onclick="filterCat='Interior Work';render()">Interior Work</span><span class="fbtn " onclick="filterCat='Kitchen';render()">Kitchen</span><span class="fbtn " onclick="filterCat='Furniture &amp; Items';render()">Furniture &amp; Items</span><span class="fbtn " onclick="filterCat='Rented Flat';render()">Rented Flat</span><span class="fbtn " onclick="filterCat='Appliances';render()">Appliances</span><span class="fbtn " onclick="filterCat='Installment';render()">Installment</span><span class="fbtn " onclick="filterCat='Creditcards';render()">Creditcards</span><span class="fbtn" onclick="addCategory()" style="border-style:dashed">+ Category</span></div><div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">STATUS:</span><span class="fbtn active" onclick="filterStatus='All';render()">All</span><span class="fbtn " onclick="filterStatus='Paid';render()">Paid</span><span class="fbtn " onclick="filterStatus='Partial';render()">Partial</span><span class="fbtn " onclick="filterStatus='Pending';render()">Pending</span></div><div class="desktop-table"><table><colgroup id="colgroup"><col style="width:183px"><col style="width:299px"><col style="width:128px"><col style="width:136px"><col style="width:174px"><col style="width:130px"><col style="width:114px"><col style="width:90px"></colgroup><tbody><tr><th>Category<span class="resizer"></span></th><th>Item<span class="resizer"></span></th><th>Date<span class="resizer"></span></th><th class="num">Total<span class="resizer"></span></th><th class="num">Paid<span class="resizer"></span></th><th class="num">Remaining<span class="resizer"></span></th><th>Status<span class="resizer"></span></th><th><span class="resizer"></span></th></tr><tr draggable="true" ondragstart="dragStart(event,0,'')" ondragover="dragOver(event)" ondrop="dropRow(event,0,'')"><td><span class="catpill"><span class="dot" style="background:#f7c948"></span><select class="cell" onchange="edit(0,'cat',this)"><option>Interior Work</option><option>Kitchen</option><option>Furniture &amp; Items</option><option>Rented Flat</option><option>Appliances</option><option>Installment</option><option selected="">Creditcards</option></select></span></td><td><input class="cell" value="Credit Cards Payment" onchange="edit(0,'item',this)"><div style="margin-top:2px"><label style="font-size:10px;color:var(--muted);cursor:pointer"><input type="checkbox" checked="" onchange="toggleInst(0)"> installment</label></div><div class="instbox"><div class="lbl">Installment plan</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px"><span>Per <span class="moneywrap" style="display:inline-block;width:100px"><input class="cell num" value="100000" onchange="editInst(0,'per',this)"></span></span><span>Count <input class="cell num" style="width:60px;display:inline-block" value="20" onchange="editInst(0,'count',this)"></span></div></div></td><td><input class="cell" value="" placeholder="dd-mmm-yyyy" onchange="edit(0,'date',this)"></td><td class="num"><div style="color:var(--muted);text-align:right">₹20,00,000</div><div class="inst">₹1,00,000 × 20</div></td><td class="num"><div style="text-align:right">₹0</div><div class="inst instbtns"><button class="rowbtn" onclick="instStep(0,-1)">−</button>0 of 20<button class="rowbtn" onclick="instStep(0,1)">+</button></div></td><td class="num" style="color:var(--muted)">₹20,00,000</td><td><span class="status Pending">Pending</span></td><td style="white-space:nowrap"><button class="rowbtn" onclick="moveRow(0,-1,'')" title="Move up">▲</button><button class="rowbtn" onclick="moveRow(0,1,'')" title="Move down">▼</button><button class="rowbtn" onclick="markPaid(0)" title="Mark fully paid">✓</button><button class="rowbtn danger" onclick="delRow(0)">✕</button></td></tr><tr class="totalrow"><td></td><td>Showing 1 item(s)</td><td></td><td class="num">₹20,00,000</td><td class="num">₹0</td><td class="num">₹20,00,000</td><td></td><td></td></tr></tbody></table></div><div class="cards"><div class="pcard"><div class="top"><div style="flex:1"><span class="catpill"><span class="dot" style="background:#f7c948"></span><span style="font-size:11px;color:var(--muted)">Creditcards</span></span></div><span class="status Pending">Pending</span></div><div class="fld"><label>Item</label><input class="cell" value="Credit Cards Payment" onchange="edit(0,'item',this)"></div><div class="two"><div class="fld"><label>Category</label><select class="cell" onchange="edit(0,'cat',this)"><option>Interior Work</option><option>Kitchen</option><option>Furniture &amp; Items</option><option>Rented Flat</option><option>Appliances</option><option>Installment</option><option selected="">Creditcards</option></select></div><div class="fld"><label>Date</label><input class="cell" value="" placeholder="dd-mmm-yyyy" onchange="edit(0,'date',this)"></div></div><div class="fld"><label><input type="checkbox" checked="" onchange="toggleInst(0)"> Installment plan</label></div><div class="instbox"><div class="lbl">Installment plan</div><div class="two"><div class="fld"><label>Per installment</label><span class="moneywrap"><input class="cell num" value="100000" onchange="editInst(0,'per',this)"></span></div><div class="fld"><label>No. of installments</label><input class="cell num" value="20" onchange="editInst(0,'count',this)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="inst">Total ₹20,00,000 · Paid ₹0</span><span class="instbtns"><button class="rowbtn" onclick="instStep(0,-1)">−</button> <b style="color:var(--part)">0 of 20</b> <button class="rowbtn" onclick="instStep(0,1)">+</button></span></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px"><span class="inst" style="color:var(--muted)">Remaining: <b style="color:var(--ink)">₹20,00,000</b></span><span><button class="rowbtn" onclick="moveRow(0,-1,'')" title="Move up">▲</button><button class="rowbtn" onclick="moveRow(0,1,'')" title="Move down">▼</button><button class="rowbtn" onclick="markPaid(0)" title="Mark fully paid">✓</button><button class="rowbtn danger" onclick="delRow(0)">✕</button></span></div></div></div><div class="addrow"><button onclick="addRow()">+ Add payment</button><button onclick="addCategory()">+ New category</button></div><div class="note">Reorder items by dragging a row (when no filter is active) or with the <b>▲ ▼</b> arrows. Tick <b>installment</b> for per-installment amount &amp; count. Drag a column-header edge to resize (desktop). Export to <b>Excel</b> or JSON up top.</div></div>
-<div class="flash" id="flash">Saved ✓</div>
+<div class="wrap" id="app"></div>
+<div class="flash" id="flash"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-var PASSCODE="Shree";
+var VIEW_PASS="Shree";
+var EDIT_PASS="Shree1111";
+var role='view'; /* 'view' or 'edit' */
+function canEdit(){return role==='edit';}
 function applyTheme(t){document.documentElement.setAttribute('data-theme',t);var b=document.getElementById('themeBtn');if(b)b.innerHTML=(t==='light')?'\u2600':'\u263E';}
 function toggleTheme(){var cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';var next=cur==='light'?'dark':'light';localStorage.setItem('het_theme',next);applyTheme(next);}
 applyTheme(localStorage.getItem('het_theme')||'dark');
@@ -204,24 +215,30 @@ function seedRows(){return[
 ];}
 
 var STORE='home_expense_tracker_v3';
-/* ===== MASTER SNAPSHOT (baked in by the owner via "Save as master") ===== */
-var MASTER_VERSION=2;
-/*MASTER_START*/var MASTER={"active":"Credit Card","budgets":{"Home Improvements":{"rows":[{"cat":"Interior Work","item":"Interior work","amt":730000,"paid":635000,"date":"2026-05-15"},{"cat":"Kitchen","item":"Kitchen Remodeling","amt":600000,"paid":451710,"date":"2026-07-03"},{"cat":"Furniture & Items","item":"Sofa (advance + 2nd)","amt":70000,"paid":35000,"date":"2026-06-01"},{"cat":"Furniture & Items","item":"Sofa cushion","amt":10000,"paid":10000,"date":"2026-06-20"},{"cat":"Furniture & Items","item":"Temple","amt":66500,"paid":66500,"date":"2026-06-30"},{"cat":"Furniture & Items","item":"Table","amt":21500,"paid":21500,"date":"2026-06-30"},{"cat":"Furniture & Items","item":"Bed mattress","amt":50000,"paid":0,"date":"2026-06-25"},{"cat":"Rented Flat","item":"Rented flat – one month","amt":22000,"paid":22000,"date":"2026-06-20"},{"cat":"Installment","item":"Air conditioner","amt":45000,"paid":15000,"date":"2026-07-10","inst":{"on":true,"per":150000,"count":3,"done":1}},{"cat":"Installment","item":"Home theater","amt":18000,"paid":3000,"date":"2026-07-10","inst":{"on":true,"per":3000,"count":6,"done":1}},{"cat":"Appliances","item":"Kitchen Fan","amt":16738,"paid":16738,"date":"2026-07-13"},{"cat":"Appliances","item":"Geyser","amt":11500,"paid":11500,"date":"2026-07-13"},{"cat":"Appliances","item":"Chimney","amt":61250,"paid":61250,"date":"2026-07-13"},{"cat":"Appliances","item":"HOB Matt","amt":31400,"paid":31400,"date":"2026-07-13"},{"cat":"Interior Work","item":"Water Filter","amt":23000,"paid":23000,"date":"2026-07-13"}],"cats":[{"id":"Interior Work","color":"#6ea8fe"},{"id":"Kitchen","color":"#c58af9"},{"id":"Furniture & Items","color":"#4fd1c5"},{"id":"Rented Flat","color":"#e5883a"},{"id":"Appliances","color":"#e35d8a"},{"id":"Installment","color":"#f7c948"}],"log":[{"who":"Someone","what":"renamed budget \"Imported\" → \"Home Improvements\"","when":"2026-08-10T01:36:57.967Z"},{"who":"Someone","what":"updated installment (per) for \"Home theater\"","when":"2026-08-10T01:35:38.146Z"},{"who":"Someone","what":"updated installment (per) for \"Home theater\"","when":"2026-08-10T01:35:31.675Z"},{"who":"Someone","what":"updated installment (per) for \"Home theater\"","when":"2026-08-10T01:35:26.369Z"},{"who":"Someone","what":"installments for \"Home theater\" now 1 of 6 paid","when":"2026-08-10T01:35:19.432Z"},{"who":"Someone","what":"installments for \"Air conditioner\" now 1 of 3 paid","when":"2026-08-10T01:35:18.170Z"},{"who":"Someone","what":"updated installment (count) for \"Air conditioner\"","when":"2026-08-10T01:35:16.301Z"},{"who":"Someone","what":"updated installment (count) for \"Air conditioner\"","when":"2026-08-10T01:35:12.056Z"},{"who":"Someone","what":"updated installment (count) for \"Home theater\"","when":"2026-08-10T01:35:00.937Z"},{"who":"Someone","what":"updated installment (per) for \"Home theater\"","when":"2026-08-10T01:34:54.728Z"},{"who":"Someone","what":"enabled installment plan for \"Home theater\"","when":"2026-08-10T01:34:51.887Z"},{"who":"Someone","what":"disabled installment plan for \"Home theater\"","when":"2026-08-10T01:34:46.829Z"},{"who":"Someone","what":"enabled installment plan for \"Home theater\"","when":"2026-08-10T01:34:42.104Z"},{"who":"Someone","what":"changed cat of \"Home theater\" — \"Appliances\" → \"Installment\"","when":"2026-08-10T01:34:39.877Z"},{"who":"Someone","what":"updated installment (count) for \"Air conditioner\"","when":"2026-08-10T01:34:26.191Z"},{"who":"Someone","what":"updated installment (per) for \"Air conditioner\"","when":"2026-08-10T01:34:22.404Z"},{"who":"Someone","what":"enabled installment plan for \"Air conditioner\"","when":"2026-08-10T01:34:19.559Z"},{"who":"Someone","what":"disabled installment plan for \"Air conditioner\"","when":"2026-08-10T01:34:13.452Z"},{"who":"Someone","what":"enabled installment plan for \"Air conditioner\"","when":"2026-08-10T01:33:57.815Z"},{"who":"Someone","what":"changed cat of \"Air conditioner\" — \"Appliances\" → \"Installment\"","when":"2026-08-10T01:33:51.941Z"},{"who":"Someone","what":"imported from a file","when":"2026-08-10T01:33:35.495Z"},{"who":"Someone","what":"changed paid-so-far of \"Home theater\" — ₹0 → ₹3,000","when":"2026-08-09T16:41:32.620Z"},{"who":"Someone","what":"changed amt of \"Home theater\" — ₹3,000 → ₹18,000","when":"2026-08-09T16:41:30.594Z"},{"who":"Someone","what":"changed paid-so-far of \"Air conditioner\" — ₹0 → ₹15,000","when":"2026-08-09T16:41:17.885Z"},{"who":"Someone","what":"changed amt of \"Air conditioner\" — ₹15,000 → ₹45,000","when":"2026-08-09T16:41:13.676Z"},{"who":"Someone","what":"changed paid-so-far of \"Water Filter\" — ₹0 → ₹23,000","when":"2026-08-09T16:39:09.043Z"},{"who":"Someone","what":"changed amt of \"Water Filter\" — ₹0 → ₹23,000","when":"2026-08-09T16:39:03.215Z"},{"who":"Someone","what":"changed paid-so-far of \"HOB Matt\" — ₹0 → ₹31,400","when":"2026-08-09T16:38:43.051Z"},{"who":"Someone","what":"changed amt of \"HOB Matt\" — ₹0 → ₹31,400","when":"2026-08-09T16:38:39.264Z"},{"who":"Someone","what":"changed item of \"Water Filter\" — \"New payment\" → \"Water Filter\"","when":"2026-08-09T16:38:25.303Z"},{"who":"Someone","what":"changed date of \"New payment\" — \"\" → \"13-Jul-2026\"","when":"2026-08-09T16:38:15.090Z"},{"who":"Someone","what":"changed date of \"HOB Matt\" — \"\" → \"13-Jul-2026\"","when":"2026-08-09T16:38:09.399Z"},{"who":"Someone","what":"changed item of \"HOB Matt\" — \"New payment\" → \"HOB Matt\"","when":"2026-08-09T16:37:58.730Z"},{"who":"Someone","what":"changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"","when":"2026-08-09T16:37:51.033Z"},{"who":"Someone","what":"added a new payment","when":"2026-08-09T16:37:47.632Z"},{"who":"Someone","what":"added a new payment","when":"2026-08-09T16:37:28.913Z"},{"who":"Someone","what":"changed cat of \"Chimney\" — \"Interior Work\" → \"Appliances\"","when":"2026-08-09T16:37:25.495Z"},{"who":"Someone","what":"changed paid-so-far of \"Chimney\" — ₹0 → ₹61,250","when":"2026-08-09T16:37:20.771Z"},{"who":"Someone","what":"changed amt of \"Chimney\" — ₹0 → ₹61,250","when":"2026-08-09T16:37:13.998Z"},{"who":"Someone","what":"changed date of \"Chimney\" — \"\" → \"13-Jul-2026\"","when":"2026-08-09T16:37:05.965Z"},{"who":"Someone","what":"changed item of \"Chimney\" — \"New payment\" → \"Chimney\"","when":"2026-08-09T16:36:56.992Z"},{"who":"Someone","what":"added a new payment","when":"2026-08-09T16:36:43.838Z"},{"who":"Someone","what":"changed paid-so-far of \"Geyser\" — ₹0 → ₹11,500","when":"2026-08-09T16:36:06.405Z"},{"who":"Someone","what":"changed amt of \"Geyser\" — ₹0 → ₹11,500","when":"2026-08-09T16:35:55.334Z"},{"who":"Someone","what":"changed date of \"Geyser\" — \"\" → \"13-Jul-2026\"","when":"2026-08-09T16:35:49.890Z"},{"who":"Someone","what":"changed item of \"Geyser\" — \"New payment\" → \"Geyser\"","when":"2026-08-09T16:34:40.992Z"},{"who":"Someone","what":"changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"","when":"2026-08-09T16:34:32.336Z"},{"who":"Someone","what":"added a new payment","when":"2026-08-09T16:34:27.519Z"},{"who":"Someone","what":"changed paid-so-far of \"Kitchen Fan\" — ₹0 → ₹16,738","when":"2026-08-09T16:34:04.766Z"},{"who":"Someone","what":"changed amt of \"Kitchen Fan\" — ₹0 → ₹16,738","when":"2026-08-09T16:34:00.266Z"},{"who":"Someone","what":"changed paid-so-far of \"Kitchen Fan\" — ₹0 → ₹0","when":"2026-08-09T16:33:49.198Z"},{"who":"Someone","what":"changed date of \"Kitchen Fan\" — \"13 7 2026\" → \"13-Jul-2026\"","when":"2026-08-09T16:33:28.607Z"},{"who":"Someone","what":"changed date of \"Kitchen Fan\" — \"\" → \"13 7 2026\"","when":"2026-08-09T16:33:17.538Z"},{"who":"Someone","what":"changed item of \"Kitchen Fan\" — \"New payment\" → \"Kitchen Fan\"","when":"2026-08-09T16:33:05.119Z"},{"who":"Someone","what":"changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"","when":"2026-08-09T16:32:55.276Z"},{"who":"Someone","what":"added a new payment","when":"2026-08-09T16:32:48.435Z"},{"who":"Someone","what":"changed amt of \"Bed mattress\" — ₹30,000 → ₹50,000","when":"2026-08-09T16:31:43.233Z"},{"who":"Someone","what":"changed paid-so-far of \"Rented flat – one month\" — ₹0 → ₹22,000","when":"2026-08-09T16:31:34.977Z"},{"who":"Someone","what":"changed paid-so-far of \"Sofa cushion\" — ₹0 → ₹10,000","when":"2026-08-09T16:31:29.877Z"},{"who":"Someone","what":"changed item of \"Kitchen Remodeling\" — \"Kitchen – 60% to start work\" → \"Kitchen Remodeling\"","when":"2026-08-09T16:30:58.798Z"},{"who":"Someone","what":"deleted \"Kitchen – 35% at 50% complete\"","when":"2026-08-09T16:30:43.472Z"},{"who":"Someone","what":"changed paid-so-far of \"Kitchen – 60% to start work\" — ₹0 → ₹4,51,710","when":"2026-08-09T16:30:41.261Z"},{"who":"Someone","what":"changed amt of \"Kitchen – 60% to start work\" — ₹3,60,000 → ₹6,00,000","when":"2026-08-09T16:30:34.887Z"},{"who":"Someone","what":"changed paid-so-far of \"Table\" — ₹0 → ₹21,500","when":"2026-08-09T16:30:10.445Z"},{"who":"Someone","what":"changed paid-so-far of \"Temple\" — ₹0 → ₹66,500","when":"2026-08-09T16:30:08.028Z"},{"who":"Someone","what":"changed amt of \"Sofa cushion\" — ₹25,000 → ₹10,000","when":"2026-08-09T16:29:38.124Z"},{"who":"Someone","what":"deleted \"Interior work – final (5%)\"","when":"2026-08-09T16:28:39.840Z"},{"who":"Someone","what":"changed paid-so-far of \"Kitchen – 35% at 50% complete\" — ₹4,01,710 → ₹4,51,710","when":"2026-08-09T16:27:38.700Z"},{"who":"Someone","what":"changed paid-so-far of \"Kitchen – 35% at 50% complete\" — ₹0 → ₹4,01,710","when":"2026-08-09T16:27:08.482Z"},{"who":"Someone","what":"deleted \"Kitchen – 5% on completion\"","when":"2026-08-09T16:26:39.723Z"},{"who":"Someone","what":"changed amt of \"Kitchen – 35% at 50% complete\" — ₹2,10,000 → ₹6,00,000","when":"2026-08-09T16:26:38.801Z"},{"who":"Someone","what":"changed item of \"Interior work\" — \"Interior work – advance (68.89%)\" → \"Interior work\"","when":"2026-08-09T16:25:56.366Z"},{"who":"Someone","what":"deleted \"Interior work – after 50% done (25%)\"","when":"2026-08-09T16:25:26.903Z"},{"who":"Someone","what":"changed paid-so-far of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹6,35,000","when":"2026-08-09T16:25:15.844Z"},{"who":"Someone","what":"changed amt of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹7,30,000","when":"2026-08-09T16:24:44.659Z"}]},"Credit Card":{"rows":[{"cat":"Creditcards","item":"Credit Cards Payment","amt":0,"paid":0,"date":"","inst":{"on":true,"per":100000,"count":20,"done":0}}],"cats":[{"id":"Interior Work","color":"#6ea8fe"},{"id":"Kitchen","color":"#c58af9"},{"id":"Furniture & Items","color":"#4fd1c5"},{"id":"Rented Flat","color":"#e5883a"},{"id":"Appliances","color":"#e35d8a"},{"id":"Installment","color":"#f7c948"},{"id":"Creditcards","color":"#f7c948"}],"log":[{"who":"Someone","what":"updated installment (count) for \"Credit Cards Payment\"","when":"2026-08-10T18:51:36.191Z"},{"who":"Someone","what":"renamed budget \"Credir Card\" → \"Credit Card\"","when":"2026-08-10T18:51:28.496Z"},{"who":"Someone","what":"updated installment (count) for \"Credit Cards Payment\"","when":"2026-08-10T01:38:33.155Z"},{"who":"Someone","what":"updated installment (per) for \"Credit Cards Payment\"","when":"2026-08-10T01:38:22.958Z"},{"who":"Someone","what":"changed item of \"Credit Cards Payment\" — \"New payment\" → \"Credit Cards Payment\"","when":"2026-08-10T01:37:57.954Z"},{"who":"Someone","what":"enabled installment plan for \"New payment\"","when":"2026-08-10T01:37:44.916Z"},{"who":"Someone","what":"changed cat of \"New payment\" — \"Interior Work\" → \"Creditcards\"","when":"2026-08-10T01:37:41.126Z"},{"who":"Someone","what":"added category \"Creditcards\"","when":"2026-08-10T01:37:29.989Z"},{"who":"Someone","what":"added a new payment","when":"2026-08-10T01:37:21.236Z"},{"who":"Someone","what":"created budget \"Credir Card\"","when":"2026-08-10T01:37:16.437Z"}]}}};/*MASTER_END*/ /* null = built-in seed; owner bakes data here */
-function masterStore(){
-  if(MASTER&&MASTER.budgets)return JSON.parse(JSON.stringify(MASTER));
-  return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};
-}
+var DATA_URL='./data.json';
+function builtinStore(){return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};}
 function loadStore(){
-  var seenV=null;try{seenV=+localStorage.getItem(STORE+'_mv');}catch(e){}
-  /* If the published master is newer than what this browser last saw, adopt master. */
-  if(seenV!==MASTER_VERSION){var ms=masterStore();try{localStorage.setItem(STORE,JSON.stringify(ms));localStorage.setItem(STORE+'_mv',String(MASTER_VERSION));}catch(e){}return ms;}
+  /* Start from the last-cached data.json if present, else built-in seed.
+     fetchData() below will refresh from the repo's data.json on load. */
   try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
-  return masterStore();
+  return builtinStore();
 }
 var store=loadStore();
-if(store.active===ALL)store.active=Object.keys(store.budgets)[0];
-(function migrateInstallation(){var changed=false;for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;var b=store.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation'){c.id='Installment';changed=true;}});(b.rows||[]).forEach(function(r){if(r.cat==='Installation'){r.cat='Installment';changed=true;}});}if(changed)localStorage.setItem(STORE,JSON.stringify(store));})();
-if(!store.budgets[store.active])store.active=Object.keys(store.budgets)[0];
+var dataStatus='';
+function normalizeStore(st){
+  if(!st||!st.budgets)return null;
+  if(st.active===ALL||!st.budgets[st.active])st.active=Object.keys(st.budgets)[0];
+  for(var bn in st.budgets){if(!st.budgets.hasOwnProperty(bn))continue;var b=st.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation')c.id='Installment';});(b.rows||[]).forEach(function(r){if(r.cat==='Installation')r.cat='Installment';});if(!b.log)b.log=[];}
+  return st;
+}
+function fetchData(){
+  /* cache-buster so GitHub Pages/CDN doesn't serve a stale file */
+  var url=DATA_URL+'?v='+Date.now();
+  return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('no data.json');return r.json();}).then(function(j){
+    var st=normalizeStore(j);
+    if(st){store=st;try{localStorage.setItem(STORE,JSON.stringify(store));}catch(e){}dataStatus='loaded';}
+  }).catch(function(){dataStatus='fallback';});
+}
 var filterCat='All',filterStatus='All',viewLog=false;
 var expanded={};
 var ALL='\u229E All Budgets';
@@ -239,25 +256,36 @@ function save(){persist();flash('Saved \u2713');}
 function who(){var w=document.getElementById('who').value.trim()||'Someone';localStorage.setItem('het_who',w);return w;}
 function record(what){cur().log.unshift({who:who(),what:what,when:new Date().toISOString()});if(cur().log.length>500)cur().log.length=500;persist();}
 
-function unlock(){var v=document.getElementById('pass').value;if(v===PASSCODE){sessionStorage.setItem('het_unlocked','1');document.getElementById('lock').style.display='none';render();}else{document.getElementById('lockerr').textContent='Incorrect passcode';}}
-function lock(){sessionStorage.removeItem('het_unlocked');document.getElementById('lock').style.display='flex';document.getElementById('pass').value='';document.getElementById('lockerr').textContent='';}
-if(sessionStorage.getItem('het_unlocked')==='1')document.getElementById('lock').style.display='none';
+function enter(r){
+  role=r;sessionStorage.setItem('het_role',r);
+  document.getElementById('lock').style.display='none';
+  document.getElementById('app').innerHTML='<div class="empty">Loading data\u2026</div>';
+  fetchData().then(function(){render();});
+}
+function unlock(){var v=document.getElementById('pass').value;
+  if(v===EDIT_PASS){enter('edit');}
+  else if(v===VIEW_PASS){enter('view');}
+  else{document.getElementById('lockerr').textContent='Incorrect passcode';}}
+function lock(){sessionStorage.removeItem('het_role');document.getElementById('lock').style.display='flex';document.getElementById('pass').value='';document.getElementById('lockerr').textContent='';}
+if(sessionStorage.getItem('het_role')){role=sessionStorage.getItem('het_role');document.getElementById('lock').style.display='none';}
 
 /* ---- budgets ---- */
-function refreshBudgetSel(){var sel=document.getElementById('budgetsel');var names=Object.keys(store.budgets);var opts=names.map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');opts+='<option '+(store.active===ALL?'selected':'')+' style="font-weight:bold">'+ALL+'</option>';sel.innerHTML=opts;document.getElementById('subline').textContent=(isAll()?'All budgets combined':store.active)+' \u00B7 partial & installment plans';}
+function refreshBudgetSel(){var sel=document.getElementById('budgetsel');var names=Object.keys(store.budgets);var opts=names.map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');opts+='<option '+(store.active===ALL?'selected':'')+' style="font-weight:bold">'+ALL+'</option>';sel.innerHTML=opts;document.getElementById('subline').textContent=(isAll()?'All budgets combined':store.active)+(canEdit()?' \u00B7 edit mode':' \u00B7 view only');}
 function switchBudget(n){store.active=n;filterCat='All';filterStatus='All';filterBudget='All';if(n!==ALL)persist();render();}
 function allRows(){var out=[];for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;store.budgets[bn].rows.forEach(function(r){out.push({r:r,budget:bn});});}return out;}
-function addBudget(){var n=prompt('Name for the new budget:');if(!n)return;n=n.trim();if(!n)return;if(store.budgets[n]){alert('That name exists.');return;}var empty=confirm('OK = start EMPTY.\nCancel = copy current categories (no rows).');store.budgets[n]={rows:[],cats:empty?defaultCats():JSON.parse(JSON.stringify(cats())),log:[]};store.active=n;record('created budget "'+n+'"');persist();render();}
-function renameBudget(){if(isAll()){alert('Pick a specific budget to rename.');return;}var old=store.active,n=prompt('Rename budget:',old);if(!n)return;n=n.trim();if(!n||n===old)return;if(store.budgets[n]){alert('Name taken.');return;}store.budgets[n]=store.budgets[old];delete store.budgets[old];store.active=n;record('renamed budget "'+old+'" \u2192 "'+n+'"');persist();render();}
-function deleteBudget(){if(isAll()){alert('Pick a specific budget to delete.');return;}if(Object.keys(store.budgets).length<=1){alert('Need at least one budget.');return;}if(!confirm('Delete budget "'+store.active+'"?'))return;delete store.budgets[store.active];store.active=Object.keys(store.budgets)[0];persist();render();}
+function addBudget(){if(!guard())return;var n=prompt('Name for the new budget:');if(!n)return;n=n.trim();if(!n)return;if(store.budgets[n]){alert('That name exists.');return;}var empty=confirm('OK = start EMPTY.\nCancel = copy current categories (no rows).');store.budgets[n]={rows:[],cats:empty?defaultCats():JSON.parse(JSON.stringify(cats())),log:[]};store.active=n;record('created budget "'+n+'"');persist();render();}
+function renameBudget(){if(!guard())return;if(isAll()){alert('Pick a specific budget to rename.');return;}var old=store.active,n=prompt('Rename budget:',old);if(!n)return;n=n.trim();if(!n||n===old)return;if(store.budgets[n]){alert('Name taken.');return;}store.budgets[n]=store.budgets[old];delete store.budgets[old];store.active=n;record('renamed budget "'+old+'" \u2192 "'+n+'"');persist();render();}
+function deleteBudget(){if(!guard())return;if(isAll()){alert('Pick a specific budget to delete.');return;}if(Object.keys(store.budgets).length<=1){alert('Need at least one budget.');return;}if(!confirm('Delete budget "'+store.active+'"?'))return;delete store.budgets[store.active];store.active=Object.keys(store.budgets)[0];persist();render();}
 
 /* ---- categories ---- */
-function addCategory(){if(isAll()){alert('Pick a specific budget to add a category.');return;}var n=prompt('New category name:');if(!n)return;n=n.trim();if(!n)return;if(catColor(n)!=='#9aa3b2'&&cats().some(function(c){return c.id===n;})){alert('That category exists.');return;}var col=PALETTE[cats().length%PALETTE.length];cats().push({id:n,color:col});record('added category "'+n+'"');persist();render();}
+function addCategory(){if(!guard())return;if(isAll()){alert('Pick a specific budget to add a category.');return;}var n=prompt('New category name:');if(!n)return;n=n.trim();if(!n)return;if(catColor(n)!=='#9aa3b2'&&cats().some(function(c){return c.id===n;})){alert('That category exists.');return;}var col=PALETTE[cats().length%PALETTE.length];cats().push({id:n,color:col});record('added category "'+n+'"');persist();render();}
 
 /* ---- edit ---- */
 function R(bn){return bn?store.budgets[bn].rows:rows();}
+function guard(){if(!canEdit()){flash('View-only \u2014 sign in with the edit passcode');return false;}return true;}
 function recordIn(bn,what){var b=bn?store.budgets[bn]:cur();b.log.unshift({who:who(),what:what,when:new Date().toISOString()});if(b.log.length>500)b.log.length=500;persist();}
 function edit(i,field,el,bn){
+  if(!guard())return;
   var arr=R(bn);
   var raw;if(field==='amt'||field==='paid')raw=(+el.value.replace(/[^0-9.-]/g,'')||0);else if(field==='date')raw=parseDate(el.value);else raw=el.value;
   var old=arr[i][field];if(String(old)===String(raw))return;
@@ -266,19 +294,19 @@ function edit(i,field,el,bn){
   var disp=(field==='amt'||field==='paid')?RS(old)+' \u2192 '+RS(raw):field==='date'?('"'+fmtDate(old)+'" \u2192 "'+fmtDate(raw)+'"'):('"'+old+'" \u2192 "'+raw+'"');
   recordIn(bn,'changed '+(field==='paid'?'paid':field)+' of "'+arr[i].item+'" \u2014 '+disp);persist();render();
 }
-function editInst(i,field,el,bn){var r=R(bn)[i];if(!r.inst)r.inst={on:true,per:0,count:0,done:0};var raw=(+el.value.replace(/[^0-9.-]/g,'')||0);if(field==='done'){if(raw<0)raw=0;if(raw>(+r.inst.count||0))raw=+r.inst.count||0;}r.inst[field]=raw;recordIn(bn,'updated installment ('+field+') for "'+r.item+'"');persist();render();}
-function toggleInst(i,bn){var r=R(bn)[i];if(!r.inst)r.inst={on:false,per:0,count:0,done:0};r.inst.on=!r.inst.on;recordIn(bn,(r.inst.on?'enabled':'disabled')+' installment plan for "'+r.item+'"');persist();render();}
-function instStep(i,d,bn){var r=R(bn)[i];if(!r.inst)return;var nd=(+r.inst.done||0)+d;if(nd<0)nd=0;if(nd>(+r.inst.count||0))nd=+r.inst.count||0;r.inst.done=nd;recordIn(bn,'installments for "'+r.item+'" now '+nd+' of '+(r.inst.count||0)+' paid');persist();render();}
-function markPaid(i,bn){var r=R(bn)[i];if(isInst(r)){r.inst.done=+r.inst.count||0;}else{r.paid=+r.amt||0;}recordIn(bn,'marked "'+r.item+'" fully Paid');persist();render();}
-function markUnpaid(i,bn){var r=R(bn)[i];if(isInst(r)){r.inst.done=0;}else{r.paid=0;}recordIn(bn,'reset "'+r.item+'" to Pending');persist();render();}
-function addRow(bn){var tgt=bn||(isAll()?null:store.active);if(!tgt){alert('Pick a specific budget to add a payment.');return;}var b=store.budgets[tgt];b.rows.push({cat:(!bn&&filterCat!=='All')?filterCat:b.cats[0].id,item:'New payment',amt:0,paid:0,date:'',inst:{on:false,per:0,count:0,done:0}});recordIn(tgt,'added a new payment');persist();render();}
-function delRow(i,bn){var arr=R(bn);recordIn(bn,'deleted "'+arr[i].item+'"');arr.splice(i,1);persist();render();}
-function clearAll(){if(isAll()){alert('Pick a specific budget to clear.');return;}if(!confirm('Delete ALL rows in this budget? Categories and log are kept.'))return;cur().rows=[];record('cleared all rows');persist();render();flash('Cleared');}
-function moveRow(i,dir,bn){var arr=R(bn);var j=i+dir;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t;recordIn(bn,'moved "'+arr[j].item+'"');persist();render();}
+function editInst(i,field,el,bn){if(!guard())return;var r=R(bn)[i];if(!r.inst)r.inst={on:true,per:0,count:0,done:0};var raw=(+el.value.replace(/[^0-9.-]/g,'')||0);if(field==='done'){if(raw<0)raw=0;if(raw>(+r.inst.count||0))raw=+r.inst.count||0;}r.inst[field]=raw;recordIn(bn,'updated installment ('+field+') for "'+r.item+'"');persist();render();}
+function toggleInst(i,bn){if(!guard())return;var r=R(bn)[i];if(!r.inst)r.inst={on:false,per:0,count:0,done:0};r.inst.on=!r.inst.on;recordIn(bn,(r.inst.on?'enabled':'disabled')+' installment plan for "'+r.item+'"');persist();render();}
+function instStep(i,d,bn){if(!guard())return;var r=R(bn)[i];if(!r.inst)return;var nd=(+r.inst.done||0)+d;if(nd<0)nd=0;if(nd>(+r.inst.count||0))nd=+r.inst.count||0;r.inst.done=nd;recordIn(bn,'installments for "'+r.item+'" now '+nd+' of '+(r.inst.count||0)+' paid');persist();render();}
+function markPaid(i,bn){if(!guard())return;var r=R(bn)[i];if(isInst(r)){r.inst.done=+r.inst.count||0;}else{r.paid=+r.amt||0;}recordIn(bn,'marked "'+r.item+'" fully Paid');persist();render();}
+function markUnpaid(i,bn){if(!guard())return;var r=R(bn)[i];if(isInst(r)){r.inst.done=0;}else{r.paid=0;}recordIn(bn,'reset "'+r.item+'" to Pending');persist();render();}
+function addRow(bn){if(!guard())return;var tgt=bn||(isAll()?null:store.active);if(!tgt){alert('Pick a specific budget to add a payment.');return;}var b=store.budgets[tgt];b.rows.push({cat:(!bn&&filterCat!=='All')?filterCat:b.cats[0].id,item:'New payment',amt:0,paid:0,date:'',inst:{on:false,per:0,count:0,done:0}});recordIn(tgt,'added a new payment');persist();render();}
+function delRow(i,bn){if(!guard())return;var arr=R(bn);recordIn(bn,'deleted "'+arr[i].item+'"');arr.splice(i,1);persist();render();}
+function clearAll(){if(!guard())return;if(isAll()){alert('Pick a specific budget to clear.');return;}if(!confirm('Delete ALL rows in this budget? Categories and log are kept.'))return;cur().rows=[];record('cleared all rows');persist();render();flash('Cleared');}
+function moveRow(i,dir,bn){if(!guard())return;var arr=R(bn);var j=i+dir;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t;recordIn(bn,'moved "'+arr[j].item+'"');persist();render();}
 var dragSrc=null,dragBn=null;
 function dragStart(ev,i,bn){dragSrc=i;dragBn=bn||'';ev.dataTransfer.effectAllowed='move';try{ev.dataTransfer.setData('text/plain',String(i));}catch(e){}}
 function dragOver(ev){ev.preventDefault();ev.dataTransfer.dropEffect='move';}
-function dropRow(ev,i,bn){ev.preventDefault();var sb=dragBn||'';var tb=bn||'';if(sb!==tb||dragSrc===null||dragSrc===i){dragSrc=null;return;}var arr=R(bn);var item=arr.splice(dragSrc,1)[0];arr.splice(i,0,item);recordIn(bn,'reordered "'+item.item+'"');dragSrc=null;persist();render();}
+function dropRow(ev,i,bn){if(!canEdit())return;ev.preventDefault();var sb=dragBn||'';var tb=bn||'';if(sb!==tb||dragSrc===null||dragSrc===i){dragSrc=null;return;}var arr=R(bn);var item=arr.splice(dragSrc,1)[0];arr.splice(i,0,item);recordIn(bn,'reordered "'+item.item+'"');dragSrc=null;persist();render();}
 
 function sumTot(a){return a.reduce(function(x,r){return x+rowTotal(r);},0);}
 function sumPaid(a){return a.reduce(function(x,r){return x+rowPaid(r);},0);}
@@ -286,20 +314,11 @@ function flash(m){var f=document.getElementById('flash');f.textContent=m;f.class
 
 /* ---- export ---- */
 function doExportJSON(){var blob=new Blob([JSON.stringify({store:store,exportedBy:who(),at:new Date().toISOString()},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='home-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
-function resetToMaster(){if(!confirm('Discard this device\u2019s local changes and reload the owner\u2019s master data?'))return;var ms=masterStore();store=ms;try{localStorage.setItem(STORE,JSON.stringify(ms));localStorage.setItem(STORE+'_mv',String(MASTER_VERSION));}catch(e){}render();flash('Reset to master');}
-function saveAsMaster(){
-  if(typeof document==='undefined')return;
-  var html=document.documentElement.outerHTML;
-  var snapshot=JSON.stringify(store);
-  var newV=MASTER_VERSION+1;
-  html=html.replace(/var MASTER_VERSION=\d+;/, 'var MASTER_VERSION='+newV+';');
-  var startM='/*MASTER_START*/',endM='/*MASTER_END*/';
-  var si=html.indexOf(startM),ei=html.indexOf(endM);
-  if(si!==-1&&ei!==-1&&ei>si){html=html.slice(0,si+startM.length)+'var MASTER='+snapshot+';'+html.slice(ei);}
-  else{alert('Could not locate the master marker \u2014 export JSON instead.');return;}
-  var blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();
-  flash('Master file downloaded \u2014 replace index.html in your repo');
+function downloadData(){
+  /* Downloads exactly the file to commit as data.json in your repo. */
+  var blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data.json';a.click();
+  flash('data.json downloaded \u2014 upload it to your repo to publish');
 }
 function doExportExcel(){
   if(typeof XLSX==='undefined'){alert('Excel library still loading, try again in a moment.');return;}
@@ -332,7 +351,7 @@ function doExportExcel(){
   XLSX.utils.book_append_sheet(wb,ws2,'By Category');
   XLSX.writeFile(wb,(store.active.replace(/[^a-z0-9]/gi,'_'))+'-'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
-function doImport(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(o.store&&o.store.budgets){for(var n in o.store.budgets){if(!o.store.budgets.hasOwnProperty(n))continue;var nm=store.budgets[n]?n+' (imported)':n;store.budgets[nm]=o.store.budgets[n];}store.active=o.store.active&&store.budgets[o.store.active]?o.store.active:Object.keys(store.budgets)[0];}else if(o.rows){store.budgets['Imported']={rows:o.rows,cats:defaultCats(),log:o.log||[]};store.active='Imported';}else{alert('Unrecognised file.');return;}record('imported from a file');persist();render();flash('Imported \u2713');}catch(err){alert('Could not read that file.');}};r.readAsText(f);e.target.value='';}
+function doImport(e){if(!guard())return;var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result);if(o.store&&o.store.budgets){for(var n in o.store.budgets){if(!o.store.budgets.hasOwnProperty(n))continue;var nm=store.budgets[n]?n+' (imported)':n;store.budgets[nm]=o.store.budgets[n];}store.active=o.store.active&&store.budgets[o.store.active]?o.store.active:Object.keys(store.budgets)[0];}else if(o.rows){store.budgets['Imported']={rows:o.rows,cats:defaultCats(),log:o.log||[]};store.active='Imported';}else{alert('Unrecognised file.');return;}record('imported from a file');persist();render();flash('Imported \u2713');}catch(err){alert('Could not read that file.');}};r.readAsText(f);e.target.value='';}
 function showLog(){viewLog=!viewLog;render();}
 
 /* ---- column resize ---- */
@@ -443,7 +462,7 @@ function renderAll(app){
       else{
         s+=compactTableHTML(bn);
       }
-      s+='<div class="addrow"><button onclick="addRow(\''+bnEsc(bn)+'\')">+ Add payment to '+bn+'</button><button onclick="switchBudget(\''+bnEsc(bn)+'\')">Open '+bn+' \u2192</button></div>';
+      s+='<div class="addrow"><button class="editonly" onclick="addRow(\''+bnEsc(bn)+'\')">+ Add payment to '+bn+'</button><button onclick="switchBudget(\''+bnEsc(bn)+'\')">Open '+bn+' \u2192</button></div>';
       s+='</div>';
     }
     s+='</div>';
@@ -458,6 +477,8 @@ function expandAll(on){Object.keys(store.budgets).forEach(function(bn){expanded[
 function budgetCatColor(bn,cid){var cs=store.budgets[bn].cats||[];for(var i=0;i<cs.length;i++)if(cs[i].id===cid)return cs[i].color;return '#9aa3b2';}
 
 function render(){
+  document.body.classList.toggle('viewonly',!canEdit());
+  var sl=document.getElementById('subline');if(sl)sl.textContent=(isAll()?'All budgets combined':store.active)+(canEdit()?' \u00B7 edit mode':' \u00B7 view only');
   refreshBudgetSel();
   var app=document.getElementById('app');
   if(isAll()){renderAll(app);return;}
@@ -481,7 +502,7 @@ function render(){
 
   s+='<div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">CATEGORY:</span>'+
      ['All'].concat(cats().map(function(c){return c.id;})).map(function(c){return '<span class="fbtn '+(filterCat===c?'active':'')+'" onclick="filterCat=\''+(''+c).replace(/'/g,"\\'")+'\';render()">'+c+'</span>';}).join('')+
-     '<span class="fbtn" onclick="addCategory()" style="border-style:dashed">+ Category</span></div>';
+     '<span class="fbtn addcat editonly" onclick="addCategory()" style="border-style:dashed">+ Category</span></div>';
   s+='<div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">STATUS:</span>'+
      ['All','Paid','Partial','Pending'].map(function(st){return '<span class="fbtn '+(filterStatus===st?'active':'')+'" onclick="filterStatus=\''+st+'\';render()">'+st+'</span>';}).join('')+'</div>';
 
@@ -534,15 +555,14 @@ function render(){
   });
   m+='</div>';
 
-  s+=t+m+'<div class="addrow"><button onclick="addRow()">+ Add payment</button><button onclick="addCategory()">+ New category</button></div>';
+  s+=t+m+'<div class="addrow"><button class="editonly" onclick="addRow()">+ Add payment</button><button class="editonly" onclick="addCategory()">+ New category</button></div>';
   s+='<div class="note">Reorder items by dragging a row (when no filter is active) or with the <b>\u25B2 \u25BC</b> arrows. Tick <b>installment</b> for per-installment amount &amp; count. Drag a column-header edge to resize (desktop). Export to <b>Excel</b> or JSON up top.</div>';
 
   app.innerHTML=s;
   applyW();setupResizers();
 }
 function moneyInInline(i,field,val){return '<span class="moneywrap" style="display:inline-block;width:100px"><input class="cell num" value="'+val+'" onchange="editInst('+i+',\''+field+'\',this)"></span>';}
-render();
+if(sessionStorage.getItem('het_role')){document.getElementById('app').innerHTML='<div class="empty">Loading data\u2026</div>';fetchData().then(function(){render();});}
 </script>
-
-
-</body></html>
+</body>
+</html>

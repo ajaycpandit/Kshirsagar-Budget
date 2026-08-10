@@ -1,0 +1,134 @@
+{
+  "active": "Home Interior",
+  "budgets": {
+    "Home Interior": {
+      "rows": [
+        {
+          "cat": "Interior Work",
+          "item": "Interior work – advance (68.89%)",
+          "amt": 475000,
+          "paid": 475000,
+          "date": "2026-05-15"
+        },
+        {
+          "cat": "Interior Work",
+          "item": "Interior work – after 50% done (25%)",
+          "amt": 180000,
+          "paid": 180000,
+          "date": "2026-05-29"
+        },
+        {
+          "cat": "Interior Work",
+          "item": "Interior work – final (5%)",
+          "amt": 34504,
+          "paid": 0,
+          "date": "2026-06-15"
+        },
+        {
+          "cat": "Kitchen",
+          "item": "Kitchen – 60% to start work",
+          "amt": 360000,
+          "paid": 0,
+          "date": "2026-07-03"
+        },
+        {
+          "cat": "Kitchen",
+          "item": "Kitchen – 35% at 50% complete",
+          "amt": 210000,
+          "paid": 0,
+          "date": "2026-07-31"
+        },
+        {
+          "cat": "Kitchen",
+          "item": "Kitchen – 5% on completion",
+          "amt": 30000,
+          "paid": 0,
+          "date": "2026-08-31"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Sofa (advance + 2nd)",
+          "amt": 70000,
+          "paid": 35000,
+          "date": "2026-06-01"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Sofa cushion",
+          "amt": 25000,
+          "paid": 0,
+          "date": "2026-06-20"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Temple",
+          "amt": 66500,
+          "paid": 0,
+          "date": "2026-06-30"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Table",
+          "amt": 21500,
+          "paid": 0,
+          "date": "2026-06-30"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Bed mattress",
+          "amt": 30000,
+          "paid": 0,
+          "date": "2026-06-25"
+        },
+        {
+          "cat": "Rented Flat",
+          "item": "Rented flat – one month",
+          "amt": 22000,
+          "paid": 0,
+          "date": "2026-06-20"
+        },
+        {
+          "cat": "Appliances",
+          "item": "Air conditioner",
+          "amt": 15000,
+          "paid": 0,
+          "date": "2026-07-10"
+        },
+        {
+          "cat": "Appliances",
+          "item": "Home theater",
+          "amt": 3000,
+          "paid": 0,
+          "date": "2026-07-10"
+        }
+      ],
+      "cats": [
+        {
+          "id": "Interior Work",
+          "color": "#6ea8fe"
+        },
+        {
+          "id": "Kitchen",
+          "color": "#c58af9"
+        },
+        {
+          "id": "Furniture & Items",
+          "color": "#4fd1c5"
+        },
+        {
+          "id": "Rented Flat",
+          "color": "#e5883a"
+        },
+        {
+          "id": "Appliances",
+          "color": "#e35d8a"
+        },
+        {
+          "id": "Installment",
+          "color": "#f7c948"
+        }
+      ],
+      "log": []
+    }
+  }
+}
