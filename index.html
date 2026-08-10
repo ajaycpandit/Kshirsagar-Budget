@@ -94,8 +94,10 @@
   .bmini .track>span{display:block;height:100%}
   .bamt{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;white-space:nowrap;min-width:130px;text-align:right}
   .bbody{padding:4px 16px 14px;border-top:1px solid var(--line)}
-  .bstats{display:flex;gap:16px;flex-wrap:wrap;padding:10px 0;color:var(--muted);font-size:13px}
-  .bstats b{color:var(--ink)}
+  .bcardstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 14px}
+  .bcardstats .stat{padding:10px 12px}
+  .bcardstats .stat .val{font-size:17px;margin-top:3px}
+  @media(max-width:820px){.bcardstats{grid-template-columns:repeat(2,1fr)}}
   .bbody .pcard{background:var(--panel);}
   .ctbl{width:100%;border-collapse:collapse;font-size:13px}
   .ctbl th{padding:6px 6px;font-size:10px}
@@ -155,6 +157,7 @@
     <button class="editonly" onclick="document.getElementById('imp').click()">&#11014;&#65039;</button>
     <input type="file" id="imp" accept=".json" style="display:none" onchange="doImport(event)">
     <button onclick="showLog()">&#128339; Log</button>
+    <button onclick="reloadData()" title="Re-pull data.json from the repo">&#128260; Reload</button>
     <button onclick="window.print()">&#128424;&#65039;</button>
     <button id="dljson" class="editonly" onclick="downloadData()" title="Download data.json to upload to GitHub">&#11015;&#65039; data.json</button>
     <button class="danger editonly" onclick="clearAll()">Clear</button>
@@ -218,27 +221,28 @@ var STORE='home_expense_tracker_v3';
 var DATA_URL='./data.json';
 function builtinStore(){return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};}
 function loadStore(){
-  /* Start from the last-cached data.json if present, else built-in seed.
-     fetchData() below will refresh from the repo's data.json on load. */
-  try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
+  /* Placeholder until fetchData() pulls the repo's data.json (the source of truth).
+     We do NOT read localStorage here anymore, so a stale local copy can't mask the repo. */
   return builtinStore();
 }
 var store=loadStore();
-var dataStatus='';
+var dataStatus='';var dataStamp='';
 function normalizeStore(st){
   if(!st||!st.budgets)return null;
-  if(st.active===ALL||!st.budgets[st.active])st.active=Object.keys(st.budgets)[0];
+  if(!st.budgets[st.active])st.active=Object.keys(st.budgets)[0];
   for(var bn in st.budgets){if(!st.budgets.hasOwnProperty(bn))continue;var b=st.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation')c.id='Installment';});(b.rows||[]).forEach(function(r){if(r.cat==='Installation')r.cat='Installment';});if(!b.log)b.log=[];}
   return st;
 }
 function fetchData(){
-  /* cache-buster so GitHub Pages/CDN doesn't serve a stale file */
   var url=DATA_URL+'?v='+Date.now();
-  return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('no data.json');return r.json();}).then(function(j){
+  return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(j){
     var st=normalizeStore(j);
-    if(st){store=st;try{localStorage.setItem(STORE,JSON.stringify(store));}catch(e){}dataStatus='loaded';}
-  }).catch(function(){dataStatus='fallback';});
+    if(st){store=st;store.active=ALL;dataStatus='loaded';dataStamp=new Date().toLocaleTimeString();}
+    else{dataStatus='fallback';}
+  }).catch(function(err){dataStatus='fallback';dataErr=(err&&err.message)||'fetch failed';store.active=ALL;});
 }
+var dataErr='';
+function reloadData(){dataStatus='';document.getElementById('app').innerHTML='<div class="empty">Reloading data\u2026</div>';fetchData().then(function(){render();flash(dataStatus==='loaded'?'Loaded from data.json':'Could not load data.json');});}
 var filterCat='All',filterStatus='All',viewLog=false;
 var expanded={};
 var ALL='\u229E All Budgets';
@@ -431,7 +435,7 @@ function renderAll(app){
   var total=all.reduce(function(x,o){return x+rowTotal(o.r);},0);
   var paid=all.reduce(function(x,o){return x+rowPaid(o.r);},0);
   var owed=total-paid,pct=total?Math.round(paid/total*100):0;
-  var s='<div class="grid">'+
+  var s=statusBanner()+'<div class="grid">'+
     '<div class="stat"><div class="lbl">Grand Total (all budgets)</div><div class="val">'+RS(total)+'</div></div>'+
     '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(paid)+'</div></div>'+
     '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(owed)+'</div></div>'+
@@ -455,9 +459,14 @@ function renderAll(app){
         '<span class="bmini"><span class="track" style="width:120px"><span style="width:'+cpct+'%;background:'+col+'"></span></span></span>'+
         '<span class="bamt">'+RS(cp)+' / '+RS(ct)+'</span>'+
       '</div>';
+    s+='<div class="bcardstats">'+
+        '<div class="stat"><div class="lbl">Total Cost</div><div class="val">'+RS(ct)+'</div></div>'+
+        '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(cp)+'</div></div>'+
+        '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(ct-cp)+'</div></div>'+
+        '<div class="stat"><div class="lbl">Progress</div><div class="val">'+cpct+'%</div><div class="bar"><span style="width:'+cpct+'%;background:var(--paid)"></span><span style="width:'+(100-cpct)+'%;background:var(--pendbg)"></span></div></div>'+
+      '</div>';
     if(open){
-      s+='<div class="bbody">'+
-         '<div class="bstats"><span>Total <b>'+RS(ct)+'</b></span><span style="color:var(--paid)">Paid <b>'+RS(cp)+'</b></span><span style="color:var(--pend)">Owed <b>'+RS(ct-cp)+'</b></span><span>'+cpct+'%</span></div>';
+      s+='<div class="bbody">';
       if(!br.length) s+='<div class="empty">No payments yet.</div>';
       else{
         s+=compactTableHTML(bn);
@@ -476,6 +485,11 @@ function expandAll(on){Object.keys(store.budgets).forEach(function(bn){expanded[
 
 function budgetCatColor(bn,cid){var cs=store.budgets[bn].cats||[];for(var i=0;i<cs.length;i++)if(cs[i].id===cid)return cs[i].color;return '#9aa3b2';}
 
+function statusBanner(){
+  if(dataStatus==='loaded')return '<div class="note" style="background:var(--paidbg);border-color:var(--paidLine);color:var(--paid)">\u2713 Loaded from data.json'+(dataStamp?(' at '+dataStamp):'')+'. <a href="#" onclick="reloadData();return false" style="color:inherit;text-decoration:underline">Reload</a></div>';
+  if(dataStatus==='fallback')return '<div class="note" style="background:var(--pendbg);border-color:var(--pendLine);color:var(--pend)">\u26A0 Could not load data.json'+(dataErr?(' ('+dataErr+')'):'')+' \u2014 showing built-in/local copy. Check the file is in the repo next to index.html. <a href="#" onclick="reloadData();return false" style="color:inherit;text-decoration:underline">Try again</a></div>';
+  return '';
+}
 function render(){
   document.body.classList.toggle('viewonly',!canEdit());
   var sl=document.getElementById('subline');if(sl)sl.textContent=(isAll()?'All budgets combined':store.active)+(canEdit()?' \u00B7 edit mode':' \u00B7 view only');
@@ -489,7 +503,7 @@ function render(){
     return;
   }
   var total=sumTot(rows()),paid=sumPaid(rows()),owed=total-paid,pct=total?Math.round(paid/total*100):0;
-  var s='<div class="grid">'+
+  var s=statusBanner()+'<div class="grid">'+
     '<div class="stat"><div class="lbl">Total Cost</div><div class="val">'+RS(total)+'</div></div>'+
     '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(paid)+'</div></div>'+
     '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(owed)+'</div></div>'+
