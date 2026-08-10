@@ -95,6 +95,9 @@
   .bamt{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;white-space:nowrap;min-width:130px;text-align:right}
   .bbody{padding:4px 16px 14px;border-top:1px solid var(--line)}
   .bcardstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 14px}
+  .loanbadge{font-size:10px;font-weight:bold;color:var(--part);background:var(--partbg);border:1px solid var(--partLine);border-radius:20px;padding:2px 9px;text-transform:uppercase;letter-spacing:.5px}
+  .loancard{border-color:var(--partLine)}
+  .loancard .bhead{background:linear-gradient(90deg,var(--partbg),transparent)}
   .bcardstats .stat{padding:10px 12px}
   .bcardstats .stat .val{font-size:17px;margin-top:3px}
   @media(max-width:820px){.bcardstats{grid-template-columns:repeat(2,1fr)}}
@@ -149,6 +152,7 @@
     <button class="editonly" onclick="addBudget()">&#65291; Budget</button>
     <button class="editonly" onclick="renameBudget()">&#9998;</button>
     <button class="danger editonly" onclick="deleteBudget()">&#128465;</button>
+    <button class="editonly" id="typeBtn" onclick="toggleBudgetType()" title="Mark this budget as Spending or Loan/Funding">&#127974; Type</button>
     <span style="flex:1"></span>
     <input id="who" class="who editonly" placeholder="Your name (for log)">
     <button class="primary editonly" onclick="save()">&#128190; Save</button>
@@ -231,7 +235,7 @@ function normalizeStore(st){
   if(st&&st.store&&st.store.budgets)st=st.store; /* accept JSON-export wrapper {store,exportedBy,at} */
   if(!st||!st.budgets)return null;
   if(!st.budgets[st.active])st.active=Object.keys(st.budgets)[0];
-  for(var bn in st.budgets){if(!st.budgets.hasOwnProperty(bn))continue;var b=st.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation')c.id='Installment';});(b.rows||[]).forEach(function(r){if(r.cat==='Installation')r.cat='Installment';});if(!b.log)b.log=[];if(!b.cats)b.cats=defaultCats();}
+  for(var bn in st.budgets){if(!st.budgets.hasOwnProperty(bn))continue;var b=st.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation')c.id='Installment';});(b.rows||[]).forEach(function(r){if(r.cat==='Installation')r.cat='Installment';});if(!b.log)b.log=[];if(!b.cats)b.cats=defaultCats();if(b.type!=='loan')b.type='spending';}
   return st;
 }
 function fetchData(){
@@ -280,10 +284,13 @@ function lock(){sessionStorage.removeItem('het_role');document.getElementById('l
 if(sessionStorage.getItem('het_role')){role=sessionStorage.getItem('het_role');document.getElementById('lock').style.display='none';}
 
 /* ---- budgets ---- */
-function refreshBudgetSel(){var sel=document.getElementById('budgetsel');var names=Object.keys(store.budgets);var opts=names.map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');opts+='<option '+(store.active===ALL?'selected':'')+' style="font-weight:bold">'+ALL+'</option>';sel.innerHTML=opts;document.getElementById('subline').textContent=(isAll()?'All budgets combined':store.active)+(canEdit()?' \u00B7 edit mode':' \u00B7 view only');}
+function refreshBudgetSel(){var sel=document.getElementById('budgetsel');var names=Object.keys(store.budgets);var opts=names.map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');opts+='<option '+(store.active===ALL?'selected':'')+' style="font-weight:bold">'+ALL+'</option>';sel.innerHTML=opts;var typ=(!isAll()&&budgetType(store.active)==='loan')?' \u00B7 Loan/Funding':'';document.getElementById('subline').textContent=(isAll()?'All budgets combined':store.active)+typ+(canEdit()?' \u00B7 edit mode':' \u00B7 view only');}
 function switchBudget(n){store.active=n;filterCat='All';filterStatus='All';filterBudget='All';if(n!==ALL)persist();render();}
 function allRows(){var out=[];for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;store.budgets[bn].rows.forEach(function(r){out.push({r:r,budget:bn});});}return out;}
-function addBudget(){if(!guard())return;var n=prompt('Name for the new budget:');if(!n)return;n=n.trim();if(!n)return;if(store.budgets[n]){alert('That name exists.');return;}var empty=confirm('OK = start EMPTY.\nCancel = copy current categories (no rows).');store.budgets[n]={rows:[],cats:empty?defaultCats():JSON.parse(JSON.stringify(cats())),log:[]};store.active=n;record('created budget "'+n+'"');persist();render();}
+function addBudget(){if(!guard())return;var n=prompt('Name for the new budget:');if(!n)return;n=n.trim();if(!n)return;if(store.budgets[n]){alert('That name exists.');return;}var empty=confirm('OK = start EMPTY.\nCancel = copy current categories (no rows).');store.budgets[n]={rows:[],cats:empty?defaultCats():JSON.parse(JSON.stringify(cats())),log:[],type:'spending'};store.active=n;record('created budget "'+n+'"');persist();render();}
+function budgetType(bn){return (store.budgets[bn]&&store.budgets[bn].type==='loan')?'loan':'spending';}
+function setBudgetType(bn,t){if(!guard())return;store.budgets[bn].type=t;recordIn(bn,'set budget type to '+(t==='loan'?'Loan / Funding':'Spending'));persist();render();}
+function toggleBudgetType(){if(!guard())return;if(isAll()){alert('Pick a specific budget first.');return;}var t=budgetType(store.active)==='loan'?'spending':'loan';setBudgetType(store.active,t);}
 function renameBudget(){if(!guard())return;if(isAll()){alert('Pick a specific budget to rename.');return;}var old=store.active,n=prompt('Rename budget:',old);if(!n)return;n=n.trim();if(!n||n===old)return;if(store.budgets[n]){alert('Name taken.');return;}store.budgets[n]=store.budgets[old];delete store.budgets[old];store.active=n;record('renamed budget "'+old+'" \u2192 "'+n+'"');persist();render();}
 function deleteBudget(){if(!guard())return;if(isAll()){alert('Pick a specific budget to delete.');return;}if(Object.keys(store.budgets).length<=1){alert('Need at least one budget.');return;}if(!confirm('Delete budget "'+store.active+'"?'))return;delete store.budgets[store.active];store.active=Object.keys(store.budgets)[0];persist();render();}
 
@@ -437,16 +444,24 @@ function compactTableHTML(bn){
 }
 
 function renderAll(app){
-  var all=allRows();
-  var total=all.reduce(function(x,o){return x+rowTotal(o.r);},0);
-  var paid=all.reduce(function(x,o){return x+rowPaid(o.r);},0);
-  var owed=total-paid,pct=total?Math.round(paid/total*100):0;
+  var spendRows=[],loanRows=[];
+  for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;var isLoan=budgetType(bn)==='loan';store.budgets[bn].rows.forEach(function(r){(isLoan?loanRows:spendRows).push(r);});}
+  var projCost=spendRows.reduce(function(x,r){return x+rowTotal(r);},0);
+  var projPaid=spendRows.reduce(function(x,r){return x+rowPaid(r);},0);
+  var spendOwed=projCost-projPaid;
+  var loanOwed=loanRows.reduce(function(x,r){return x+(rowTotal(r)-rowPaid(r));},0);
+  var totalOwed=spendOwed+loanOwed;
+  var hasLoan=loanRows.length>0;
+  var pct=projCost?Math.round(projPaid/projCost*100):0;
   var s=statusBanner()+'<div class="grid">'+
-    '<div class="stat"><div class="lbl">Grand Total (all budgets)</div><div class="val">'+RS(total)+'</div></div>'+
-    '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(paid)+'</div></div>'+
-    '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(owed)+'</div></div>'+
-    '<div class="stat"><div class="lbl">Progress</div><div class="val">'+pct+'%</div><div class="bar"><span style="width:'+pct+'%;background:var(--paid)"></span><span style="width:'+(100-pct)+'%;background:var(--pendbg)"></span></div></div>'+
+    '<div class="stat"><div class="lbl">Total Project Cost'+(hasLoan?' (excl. loans)':'')+'</div><div class="val">'+RS(projCost)+'</div></div>'+
+    '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(projPaid)+'</div></div>'+
+    '<div class="stat pend"><div class="lbl">Total Still Owed'+(hasLoan?' (incl. loans)':'')+'</div><div class="val">'+RS(totalOwed)+'</div></div>'+
+    '<div class="stat"><div class="lbl">Project Progress</div><div class="val">'+pct+'%</div><div class="bar"><span style="width:'+pct+'%;background:var(--paid)"></span><span style="width:'+(100-pct)+'%;background:var(--pendbg)"></span></div></div>'+
     '</div>';
+  if(hasLoan){
+    s+='<div class="note" style="background:var(--noteBg);border-color:var(--noteLine);color:var(--noteInk)">Loan / Funding budgets are excluded from <b>Project Cost</b> (so money that flowed into other budgets isn\u2019t double-counted), but their unpaid balance <b>'+RS(loanOwed)+'</b> is included in <b>Total Still Owed</b>. Spending owed: '+RS(spendOwed)+' + Loan owed: '+RS(loanOwed)+'.</div>';
+  }
 
   s+='<div style="display:flex;gap:8px;margin:16px 0 4px;flex-wrap:wrap"><button onclick="expandAll(true)">Expand all</button><button onclick="expandAll(false)">Collapse all</button></div>';
 
@@ -455,20 +470,22 @@ function renderAll(app){
     var b=store.budgets[bn];var br=b.rows;
     var ct=br.reduce(function(x,r){return x+rowTotal(r);},0),cp=br.reduce(function(x,r){return x+rowPaid(r);},0);
     var cpct=ct?Math.round(cp/ct*100):0;var col=PALETTE[bi%PALETTE.length];var open=!!expanded[bn];
-    s+='<div class="bcard">'+
+    var isLoan=budgetType(bn)==='loan';
+    s+='<div class="bcard'+(isLoan?' loancard':'')+'">'+
       '<div class="bhead" onclick="toggleCard(\''+bnEsc(bn)+'\')">'+
         '<span class="caret">'+(open?'\u25BC':'\u25B6')+'</span>'+
         '<span class="dot" style="background:'+col+'"></span>'+
         '<span class="bname">'+bn+'</span>'+
+        (isLoan?'<span class="loanbadge">Loan / Funding</span>':'')+
         '<span class="bcount">'+br.length+' item'+(br.length===1?'':'s')+'</span>'+
         '<span style="flex:1"></span>'+
         '<span class="bmini"><span class="track" style="width:120px"><span style="width:'+cpct+'%;background:'+col+'"></span></span></span>'+
         '<span class="bamt">'+RS(cp)+' / '+RS(ct)+'</span>'+
       '</div>';
     s+='<div class="bcardstats">'+
-        '<div class="stat"><div class="lbl">Total Cost</div><div class="val">'+RS(ct)+'</div></div>'+
-        '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(cp)+'</div></div>'+
-        '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(ct-cp)+'</div></div>'+
+        '<div class="stat"><div class="lbl">'+(isLoan?'Loan Amount':'Total Cost')+'</div><div class="val">'+RS(ct)+'</div></div>'+
+        '<div class="stat paid"><div class="lbl">'+(isLoan?'Repaid':'Paid so far')+'</div><div class="val">'+RS(cp)+'</div></div>'+
+        '<div class="stat pend"><div class="lbl">'+(isLoan?'Outstanding':'Still Owed')+'</div><div class="val">'+RS(ct-cp)+'</div></div>'+
         '<div class="stat"><div class="lbl">Progress</div><div class="val">'+cpct+'%</div><div class="bar"><span style="width:'+cpct+'%;background:var(--paid)"></span><span style="width:'+(100-cpct)+'%;background:var(--pendbg)"></span></div></div>'+
       '</div>';
     if(open){
