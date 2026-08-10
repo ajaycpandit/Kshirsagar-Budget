@@ -1,1046 +1,1042 @@
 {
-  "store": {
-    "active": "Pandit (Kaku)",
-    "budgets": {
-      "Home Improvements": {
-        "rows": [
-          {
-            "cat": "Interior Work",
-            "item": "Interior work",
-            "amt": 730000,
-            "paid": 730000,
-            "date": "2026-05-15"
-          },
-          {
-            "cat": "Kitchen",
-            "item": "Kitchen Remodeling",
-            "amt": 600000,
-            "paid": 550000,
-            "date": "2026-07-03"
-          },
-          {
-            "cat": "Furniture & Items",
-            "item": "Sofa (advance + 2nd)",
-            "amt": 70000,
-            "paid": 35000,
-            "date": "2026-06-01"
-          },
-          {
-            "cat": "Furniture & Items",
-            "item": "Sofa cushion",
-            "amt": 10000,
-            "paid": 10000,
-            "date": "2026-06-20"
-          },
-          {
-            "cat": "Furniture & Items",
-            "item": "Temple",
-            "amt": 66500,
-            "paid": 66500,
-            "date": "2026-06-30"
-          },
-          {
-            "cat": "Furniture & Items",
-            "item": "Table",
-            "amt": 21500,
-            "paid": 21500,
-            "date": "2026-06-30"
-          },
-          {
-            "cat": "Furniture & Items",
-            "item": "Bed mattress",
-            "amt": 50000,
-            "paid": 0,
-            "date": "2026-06-25"
-          },
-          {
-            "cat": "Rented Flat",
-            "item": "Rented flat – one month",
-            "amt": 22000,
-            "paid": 22000,
-            "date": "2026-06-20"
-          },
-          {
-            "cat": "Installment",
-            "item": "Air conditioner",
-            "amt": 45000,
-            "paid": 15000,
-            "date": "2026-07-10",
-            "inst": {
-              "on": true,
-              "per": 15000,
-              "count": 3,
-              "done": 2
-            }
-          },
-          {
-            "cat": "Installment",
-            "item": "Home theater",
-            "amt": 18000,
-            "paid": 3000,
-            "date": "2026-07-10",
-            "inst": {
-              "on": true,
-              "per": 3000,
-              "count": 3,
-              "done": 2
-            }
-          },
-          {
-            "cat": "Appliances",
-            "item": "Kitchen Fan",
-            "amt": 16738,
-            "paid": 16738,
-            "date": "2026-07-13"
-          },
-          {
-            "cat": "Appliances",
-            "item": "Geyser",
-            "amt": 11500,
-            "paid": 11500,
-            "date": "2026-07-13"
-          },
-          {
-            "cat": "Appliances",
-            "item": "Chimney",
-            "amt": 61250,
-            "paid": 61250,
-            "date": "2026-07-13"
-          },
-          {
-            "cat": "Appliances",
-            "item": "HOB Matt",
-            "amt": 31400,
-            "paid": 31400,
-            "date": "2026-07-13"
-          },
-          {
-            "cat": "Appliances",
-            "item": "Water Filter",
-            "amt": 23000,
-            "paid": 23000,
-            "date": "2026-07-13"
+  "active": "Pandit (Kaku)",
+  "budgets": {
+    "Home Improvements": {
+      "rows": [
+        {
+          "cat": "Interior Work",
+          "item": "Interior work",
+          "amt": 730000,
+          "paid": 730000,
+          "date": "2026-05-15"
+        },
+        {
+          "cat": "Kitchen",
+          "item": "Kitchen Remodeling",
+          "amt": 600000,
+          "paid": 550000,
+          "date": "2026-07-03"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Sofa (advance + 2nd)",
+          "amt": 70000,
+          "paid": 35000,
+          "date": "2026-06-01"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Sofa cushion",
+          "amt": 10000,
+          "paid": 10000,
+          "date": "2026-06-20"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Temple",
+          "amt": 66500,
+          "paid": 66500,
+          "date": "2026-06-30"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Table",
+          "amt": 21500,
+          "paid": 21500,
+          "date": "2026-06-30"
+        },
+        {
+          "cat": "Furniture & Items",
+          "item": "Bed mattress",
+          "amt": 50000,
+          "paid": 0,
+          "date": "2026-06-25"
+        },
+        {
+          "cat": "Rented Flat",
+          "item": "Rented flat – one month",
+          "amt": 22000,
+          "paid": 22000,
+          "date": "2026-06-20"
+        },
+        {
+          "cat": "Installment",
+          "item": "Air conditioner",
+          "amt": 45000,
+          "paid": 15000,
+          "date": "2026-07-10",
+          "inst": {
+            "on": true,
+            "per": 15000,
+            "count": 3,
+            "done": 2
           }
-        ],
-        "cats": [
-          {
-            "id": "Interior Work",
-            "color": "#6ea8fe"
-          },
-          {
-            "id": "Kitchen",
-            "color": "#c58af9"
-          },
-          {
-            "id": "Furniture & Items",
-            "color": "#4fd1c5"
-          },
-          {
-            "id": "Rented Flat",
-            "color": "#e5883a"
-          },
-          {
-            "id": "Appliances",
-            "color": "#e35d8a"
-          },
-          {
-            "id": "Installment",
-            "color": "#f7c948"
+        },
+        {
+          "cat": "Installment",
+          "item": "Home theater",
+          "amt": 18000,
+          "paid": 3000,
+          "date": "2026-07-10",
+          "inst": {
+            "on": true,
+            "per": 3000,
+            "count": 3,
+            "done": 2
           }
-        ],
-        "log": [
-          {
-            "who": "Someone",
-            "what": "changed paid of \"Kitchen Remodeling\" — ₹55,000 → ₹5,50,000",
-            "when": "2026-08-10T19:54:53.202Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid of \"Kitchen Remodeling\" — ₹4,51,710 → ₹55,000",
-            "when": "2026-08-10T19:54:50.319Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid of \"Interior work\" — ₹6,35,000 → ₹7,30,000",
-            "when": "2026-08-10T19:54:31.058Z"
-          },
-          {
-            "who": "Someone",
-            "what": "imported from a file",
-            "when": "2026-08-10T19:53:45.444Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Air conditioner\"",
-            "when": "2026-08-10T19:51:54.358Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Air conditioner\" now 2 of 3 paid",
-            "when": "2026-08-10T19:51:46.229Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Home theater\" now 2 of 3 paid",
-            "when": "2026-08-10T19:51:44.996Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Home theater\"",
-            "when": "2026-08-10T19:51:44.448Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"Water Filter\" — \"Interior Work\" → \"Appliances\"",
-            "when": "2026-08-10T19:51:36.447Z"
-          },
-          {
-            "who": "Someone",
-            "what": "renamed budget \"Imported\" → \"Home Improvements\"",
-            "when": "2026-08-10T01:36:57.967Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Home theater\"",
-            "when": "2026-08-10T01:35:38.146Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Home theater\"",
-            "when": "2026-08-10T01:35:31.675Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Home theater\"",
-            "when": "2026-08-10T01:35:26.369Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Home theater\" now 1 of 6 paid",
-            "when": "2026-08-10T01:35:19.432Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Air conditioner\" now 1 of 3 paid",
-            "when": "2026-08-10T01:35:18.170Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Air conditioner\"",
-            "when": "2026-08-10T01:35:16.301Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Air conditioner\"",
-            "when": "2026-08-10T01:35:12.056Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Home theater\"",
-            "when": "2026-08-10T01:35:00.937Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Home theater\"",
-            "when": "2026-08-10T01:34:54.728Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Home theater\"",
-            "when": "2026-08-10T01:34:51.887Z"
-          },
-          {
-            "who": "Someone",
-            "what": "disabled installment plan for \"Home theater\"",
-            "when": "2026-08-10T01:34:46.829Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Home theater\"",
-            "when": "2026-08-10T01:34:42.104Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"Home theater\" — \"Appliances\" → \"Installment\"",
-            "when": "2026-08-10T01:34:39.877Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Air conditioner\"",
-            "when": "2026-08-10T01:34:26.191Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Air conditioner\"",
-            "when": "2026-08-10T01:34:22.404Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Air conditioner\"",
-            "when": "2026-08-10T01:34:19.559Z"
-          },
-          {
-            "who": "Someone",
-            "what": "disabled installment plan for \"Air conditioner\"",
-            "when": "2026-08-10T01:34:13.452Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Air conditioner\"",
-            "when": "2026-08-10T01:33:57.815Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"Air conditioner\" — \"Appliances\" → \"Installment\"",
-            "when": "2026-08-10T01:33:51.941Z"
-          },
-          {
-            "who": "Someone",
-            "what": "imported from a file",
-            "when": "2026-08-10T01:33:35.495Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Home theater\" — ₹0 → ₹3,000",
-            "when": "2026-08-09T16:41:32.620Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Home theater\" — ₹3,000 → ₹18,000",
-            "when": "2026-08-09T16:41:30.594Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Air conditioner\" — ₹0 → ₹15,000",
-            "when": "2026-08-09T16:41:17.885Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Air conditioner\" — ₹15,000 → ₹45,000",
-            "when": "2026-08-09T16:41:13.676Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Water Filter\" — ₹0 → ₹23,000",
-            "when": "2026-08-09T16:39:09.043Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Water Filter\" — ₹0 → ₹23,000",
-            "when": "2026-08-09T16:39:03.215Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"HOB Matt\" — ₹0 → ₹31,400",
-            "when": "2026-08-09T16:38:43.051Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"HOB Matt\" — ₹0 → ₹31,400",
-            "when": "2026-08-09T16:38:39.264Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Water Filter\" — \"New payment\" → \"Water Filter\"",
-            "when": "2026-08-09T16:38:25.303Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"New payment\" — \"\" → \"13-Jul-2026\"",
-            "when": "2026-08-09T16:38:15.090Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"HOB Matt\" — \"\" → \"13-Jul-2026\"",
-            "when": "2026-08-09T16:38:09.399Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"HOB Matt\" — \"New payment\" → \"HOB Matt\"",
-            "when": "2026-08-09T16:37:58.730Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"",
-            "when": "2026-08-09T16:37:51.033Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-09T16:37:47.632Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-09T16:37:28.913Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"Chimney\" — \"Interior Work\" → \"Appliances\"",
-            "when": "2026-08-09T16:37:25.495Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Chimney\" — ₹0 → ₹61,250",
-            "when": "2026-08-09T16:37:20.771Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Chimney\" — ₹0 → ₹61,250",
-            "when": "2026-08-09T16:37:13.998Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Chimney\" — \"\" → \"13-Jul-2026\"",
-            "when": "2026-08-09T16:37:05.965Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Chimney\" — \"New payment\" → \"Chimney\"",
-            "when": "2026-08-09T16:36:56.992Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-09T16:36:43.838Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Geyser\" — ₹0 → ₹11,500",
-            "when": "2026-08-09T16:36:06.405Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Geyser\" — ₹0 → ₹11,500",
-            "when": "2026-08-09T16:35:55.334Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Geyser\" — \"\" → \"13-Jul-2026\"",
-            "when": "2026-08-09T16:35:49.890Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Geyser\" — \"New payment\" → \"Geyser\"",
-            "when": "2026-08-09T16:34:40.992Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"",
-            "when": "2026-08-09T16:34:32.336Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-09T16:34:27.519Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Kitchen Fan\" — ₹0 → ₹16,738",
-            "when": "2026-08-09T16:34:04.766Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Kitchen Fan\" — ₹0 → ₹16,738",
-            "when": "2026-08-09T16:34:00.266Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Kitchen Fan\" — ₹0 → ₹0",
-            "when": "2026-08-09T16:33:49.198Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Kitchen Fan\" — \"13 7 2026\" → \"13-Jul-2026\"",
-            "when": "2026-08-09T16:33:28.607Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Kitchen Fan\" — \"\" → \"13 7 2026\"",
-            "when": "2026-08-09T16:33:17.538Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Kitchen Fan\" — \"New payment\" → \"Kitchen Fan\"",
-            "when": "2026-08-09T16:33:05.119Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"",
-            "when": "2026-08-09T16:32:55.276Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-09T16:32:48.435Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Bed mattress\" — ₹30,000 → ₹50,000",
-            "when": "2026-08-09T16:31:43.233Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Rented flat – one month\" — ₹0 → ₹22,000",
-            "when": "2026-08-09T16:31:34.977Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Sofa cushion\" — ₹0 → ₹10,000",
-            "when": "2026-08-09T16:31:29.877Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Kitchen Remodeling\" — \"Kitchen – 60% to start work\" → \"Kitchen Remodeling\"",
-            "when": "2026-08-09T16:30:58.798Z"
-          },
-          {
-            "who": "Someone",
-            "what": "deleted \"Kitchen – 35% at 50% complete\"",
-            "when": "2026-08-09T16:30:43.472Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Kitchen – 60% to start work\" — ₹0 → ₹4,51,710",
-            "when": "2026-08-09T16:30:41.261Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Kitchen – 60% to start work\" — ₹3,60,000 → ₹6,00,000",
-            "when": "2026-08-09T16:30:34.887Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Table\" — ₹0 → ₹21,500",
-            "when": "2026-08-09T16:30:10.445Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Temple\" — ₹0 → ₹66,500",
-            "when": "2026-08-09T16:30:08.028Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Sofa cushion\" — ₹25,000 → ₹10,000",
-            "when": "2026-08-09T16:29:38.124Z"
-          },
-          {
-            "who": "Someone",
-            "what": "deleted \"Interior work – final (5%)\"",
-            "when": "2026-08-09T16:28:39.840Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Kitchen – 35% at 50% complete\" — ₹4,01,710 → ₹4,51,710",
-            "when": "2026-08-09T16:27:38.700Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Kitchen – 35% at 50% complete\" — ₹0 → ₹4,01,710",
-            "when": "2026-08-09T16:27:08.482Z"
-          },
-          {
-            "who": "Someone",
-            "what": "deleted \"Kitchen – 5% on completion\"",
-            "when": "2026-08-09T16:26:39.723Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Kitchen – 35% at 50% complete\" — ₹2,10,000 → ₹6,00,000",
-            "when": "2026-08-09T16:26:38.801Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Interior work\" — \"Interior work – advance (68.89%)\" → \"Interior work\"",
-            "when": "2026-08-09T16:25:56.366Z"
-          },
-          {
-            "who": "Someone",
-            "what": "deleted \"Interior work – after 50% done (25%)\"",
-            "when": "2026-08-09T16:25:26.903Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed paid-so-far of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹6,35,000",
-            "when": "2026-08-09T16:25:15.844Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed amt of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹7,30,000",
-            "when": "2026-08-09T16:24:44.659Z"
+        },
+        {
+          "cat": "Appliances",
+          "item": "Kitchen Fan",
+          "amt": 16738,
+          "paid": 16738,
+          "date": "2026-07-13"
+        },
+        {
+          "cat": "Appliances",
+          "item": "Geyser",
+          "amt": 11500,
+          "paid": 11500,
+          "date": "2026-07-13"
+        },
+        {
+          "cat": "Appliances",
+          "item": "Chimney",
+          "amt": 61250,
+          "paid": 61250,
+          "date": "2026-07-13"
+        },
+        {
+          "cat": "Appliances",
+          "item": "HOB Matt",
+          "amt": 31400,
+          "paid": 31400,
+          "date": "2026-07-13"
+        },
+        {
+          "cat": "Appliances",
+          "item": "Water Filter",
+          "amt": 23000,
+          "paid": 23000,
+          "date": "2026-07-13"
+        }
+      ],
+      "cats": [
+        {
+          "id": "Interior Work",
+          "color": "#6ea8fe"
+        },
+        {
+          "id": "Kitchen",
+          "color": "#c58af9"
+        },
+        {
+          "id": "Furniture & Items",
+          "color": "#4fd1c5"
+        },
+        {
+          "id": "Rented Flat",
+          "color": "#e5883a"
+        },
+        {
+          "id": "Appliances",
+          "color": "#e35d8a"
+        },
+        {
+          "id": "Installment",
+          "color": "#f7c948"
+        }
+      ],
+      "log": [
+        {
+          "who": "Someone",
+          "what": "changed paid of \"Kitchen Remodeling\" — ₹55,000 → ₹5,50,000",
+          "when": "2026-08-10T19:54:53.202Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid of \"Kitchen Remodeling\" — ₹4,51,710 → ₹55,000",
+          "when": "2026-08-10T19:54:50.319Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid of \"Interior work\" — ₹6,35,000 → ₹7,30,000",
+          "when": "2026-08-10T19:54:31.058Z"
+        },
+        {
+          "who": "Someone",
+          "what": "imported from a file",
+          "when": "2026-08-10T19:53:45.444Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Air conditioner\"",
+          "when": "2026-08-10T19:51:54.358Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Air conditioner\" now 2 of 3 paid",
+          "when": "2026-08-10T19:51:46.229Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Home theater\" now 2 of 3 paid",
+          "when": "2026-08-10T19:51:44.996Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Home theater\"",
+          "when": "2026-08-10T19:51:44.448Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"Water Filter\" — \"Interior Work\" → \"Appliances\"",
+          "when": "2026-08-10T19:51:36.447Z"
+        },
+        {
+          "who": "Someone",
+          "what": "renamed budget \"Imported\" → \"Home Improvements\"",
+          "when": "2026-08-10T01:36:57.967Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Home theater\"",
+          "when": "2026-08-10T01:35:38.146Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Home theater\"",
+          "when": "2026-08-10T01:35:31.675Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Home theater\"",
+          "when": "2026-08-10T01:35:26.369Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Home theater\" now 1 of 6 paid",
+          "when": "2026-08-10T01:35:19.432Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Air conditioner\" now 1 of 3 paid",
+          "when": "2026-08-10T01:35:18.170Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Air conditioner\"",
+          "when": "2026-08-10T01:35:16.301Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Air conditioner\"",
+          "when": "2026-08-10T01:35:12.056Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Home theater\"",
+          "when": "2026-08-10T01:35:00.937Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Home theater\"",
+          "when": "2026-08-10T01:34:54.728Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Home theater\"",
+          "when": "2026-08-10T01:34:51.887Z"
+        },
+        {
+          "who": "Someone",
+          "what": "disabled installment plan for \"Home theater\"",
+          "when": "2026-08-10T01:34:46.829Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Home theater\"",
+          "when": "2026-08-10T01:34:42.104Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"Home theater\" — \"Appliances\" → \"Installment\"",
+          "when": "2026-08-10T01:34:39.877Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Air conditioner\"",
+          "when": "2026-08-10T01:34:26.191Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Air conditioner\"",
+          "when": "2026-08-10T01:34:22.404Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Air conditioner\"",
+          "when": "2026-08-10T01:34:19.559Z"
+        },
+        {
+          "who": "Someone",
+          "what": "disabled installment plan for \"Air conditioner\"",
+          "when": "2026-08-10T01:34:13.452Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Air conditioner\"",
+          "when": "2026-08-10T01:33:57.815Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"Air conditioner\" — \"Appliances\" → \"Installment\"",
+          "when": "2026-08-10T01:33:51.941Z"
+        },
+        {
+          "who": "Someone",
+          "what": "imported from a file",
+          "when": "2026-08-10T01:33:35.495Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Home theater\" — ₹0 → ₹3,000",
+          "when": "2026-08-09T16:41:32.620Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Home theater\" — ₹3,000 → ₹18,000",
+          "when": "2026-08-09T16:41:30.594Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Air conditioner\" — ₹0 → ₹15,000",
+          "when": "2026-08-09T16:41:17.885Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Air conditioner\" — ₹15,000 → ₹45,000",
+          "when": "2026-08-09T16:41:13.676Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Water Filter\" — ₹0 → ₹23,000",
+          "when": "2026-08-09T16:39:09.043Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Water Filter\" — ₹0 → ₹23,000",
+          "when": "2026-08-09T16:39:03.215Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"HOB Matt\" — ₹0 → ₹31,400",
+          "when": "2026-08-09T16:38:43.051Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"HOB Matt\" — ₹0 → ₹31,400",
+          "when": "2026-08-09T16:38:39.264Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Water Filter\" — \"New payment\" → \"Water Filter\"",
+          "when": "2026-08-09T16:38:25.303Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"New payment\" — \"\" → \"13-Jul-2026\"",
+          "when": "2026-08-09T16:38:15.090Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"HOB Matt\" — \"\" → \"13-Jul-2026\"",
+          "when": "2026-08-09T16:38:09.399Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"HOB Matt\" — \"New payment\" → \"HOB Matt\"",
+          "when": "2026-08-09T16:37:58.730Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"",
+          "when": "2026-08-09T16:37:51.033Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-09T16:37:47.632Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-09T16:37:28.913Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"Chimney\" — \"Interior Work\" → \"Appliances\"",
+          "when": "2026-08-09T16:37:25.495Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Chimney\" — ₹0 → ₹61,250",
+          "when": "2026-08-09T16:37:20.771Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Chimney\" — ₹0 → ₹61,250",
+          "when": "2026-08-09T16:37:13.998Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Chimney\" — \"\" → \"13-Jul-2026\"",
+          "when": "2026-08-09T16:37:05.965Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Chimney\" — \"New payment\" → \"Chimney\"",
+          "when": "2026-08-09T16:36:56.992Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-09T16:36:43.838Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Geyser\" — ₹0 → ₹11,500",
+          "when": "2026-08-09T16:36:06.405Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Geyser\" — ₹0 → ₹11,500",
+          "when": "2026-08-09T16:35:55.334Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Geyser\" — \"\" → \"13-Jul-2026\"",
+          "when": "2026-08-09T16:35:49.890Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Geyser\" — \"New payment\" → \"Geyser\"",
+          "when": "2026-08-09T16:34:40.992Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"",
+          "when": "2026-08-09T16:34:32.336Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-09T16:34:27.519Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Kitchen Fan\" — ₹0 → ₹16,738",
+          "when": "2026-08-09T16:34:04.766Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Kitchen Fan\" — ₹0 → ₹16,738",
+          "when": "2026-08-09T16:34:00.266Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Kitchen Fan\" — ₹0 → ₹0",
+          "when": "2026-08-09T16:33:49.198Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Kitchen Fan\" — \"13 7 2026\" → \"13-Jul-2026\"",
+          "when": "2026-08-09T16:33:28.607Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Kitchen Fan\" — \"\" → \"13 7 2026\"",
+          "when": "2026-08-09T16:33:17.538Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Kitchen Fan\" — \"New payment\" → \"Kitchen Fan\"",
+          "when": "2026-08-09T16:33:05.119Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Appliances\"",
+          "when": "2026-08-09T16:32:55.276Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-09T16:32:48.435Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Bed mattress\" — ₹30,000 → ₹50,000",
+          "when": "2026-08-09T16:31:43.233Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Rented flat – one month\" — ₹0 → ₹22,000",
+          "when": "2026-08-09T16:31:34.977Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Sofa cushion\" — ₹0 → ₹10,000",
+          "when": "2026-08-09T16:31:29.877Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Kitchen Remodeling\" — \"Kitchen – 60% to start work\" → \"Kitchen Remodeling\"",
+          "when": "2026-08-09T16:30:58.798Z"
+        },
+        {
+          "who": "Someone",
+          "what": "deleted \"Kitchen – 35% at 50% complete\"",
+          "when": "2026-08-09T16:30:43.472Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Kitchen – 60% to start work\" — ₹0 → ₹4,51,710",
+          "when": "2026-08-09T16:30:41.261Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Kitchen – 60% to start work\" — ₹3,60,000 → ₹6,00,000",
+          "when": "2026-08-09T16:30:34.887Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Table\" — ₹0 → ₹21,500",
+          "when": "2026-08-09T16:30:10.445Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Temple\" — ₹0 → ₹66,500",
+          "when": "2026-08-09T16:30:08.028Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Sofa cushion\" — ₹25,000 → ₹10,000",
+          "when": "2026-08-09T16:29:38.124Z"
+        },
+        {
+          "who": "Someone",
+          "what": "deleted \"Interior work – final (5%)\"",
+          "when": "2026-08-09T16:28:39.840Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Kitchen – 35% at 50% complete\" — ₹4,01,710 → ₹4,51,710",
+          "when": "2026-08-09T16:27:38.700Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Kitchen – 35% at 50% complete\" — ₹0 → ₹4,01,710",
+          "when": "2026-08-09T16:27:08.482Z"
+        },
+        {
+          "who": "Someone",
+          "what": "deleted \"Kitchen – 5% on completion\"",
+          "when": "2026-08-09T16:26:39.723Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Kitchen – 35% at 50% complete\" — ₹2,10,000 → ₹6,00,000",
+          "when": "2026-08-09T16:26:38.801Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Interior work\" — \"Interior work – advance (68.89%)\" → \"Interior work\"",
+          "when": "2026-08-09T16:25:56.366Z"
+        },
+        {
+          "who": "Someone",
+          "what": "deleted \"Interior work – after 50% done (25%)\"",
+          "when": "2026-08-09T16:25:26.903Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid-so-far of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹6,35,000",
+          "when": "2026-08-09T16:25:15.844Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed amt of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹7,30,000",
+          "when": "2026-08-09T16:24:44.659Z"
+        }
+      ]
+    },
+    "Credit Card": {
+      "rows": [
+        {
+          "cat": "Creditcards",
+          "item": "Credit Cards Payment",
+          "amt": 0,
+          "paid": 0,
+          "date": "",
+          "inst": {
+            "on": true,
+            "per": 100000,
+            "count": 20,
+            "done": 0
           }
-        ]
-      },
-      "Credit Card": {
-        "rows": [
-          {
-            "cat": "Creditcards",
-            "item": "Credit Cards Payment",
-            "amt": 0,
-            "paid": 0,
-            "date": "",
-            "inst": {
-              "on": true,
-              "per": 100000,
-              "count": 20,
-              "done": 0
-            }
+        }
+      ],
+      "cats": [
+        {
+          "id": "Interior Work",
+          "color": "#6ea8fe"
+        },
+        {
+          "id": "Kitchen",
+          "color": "#c58af9"
+        },
+        {
+          "id": "Furniture & Items",
+          "color": "#4fd1c5"
+        },
+        {
+          "id": "Rented Flat",
+          "color": "#e5883a"
+        },
+        {
+          "id": "Appliances",
+          "color": "#e35d8a"
+        },
+        {
+          "id": "Installment",
+          "color": "#f7c948"
+        },
+        {
+          "id": "Creditcards",
+          "color": "#f7c948"
+        }
+      ],
+      "log": [
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Credit Cards Payment\"",
+          "when": "2026-08-10T18:51:36.191Z"
+        },
+        {
+          "who": "Someone",
+          "what": "renamed budget \"Credir Card\" → \"Credit Card\"",
+          "when": "2026-08-10T18:51:28.496Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Credit Cards Payment\"",
+          "when": "2026-08-10T01:38:33.155Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Credit Cards Payment\"",
+          "when": "2026-08-10T01:38:22.958Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Credit Cards Payment\" — \"New payment\" → \"Credit Cards Payment\"",
+          "when": "2026-08-10T01:37:57.954Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"New payment\"",
+          "when": "2026-08-10T01:37:44.916Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Creditcards\"",
+          "when": "2026-08-10T01:37:41.126Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added category \"Creditcards\"",
+          "when": "2026-08-10T01:37:29.989Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-10T01:37:21.236Z"
+        },
+        {
+          "who": "Someone",
+          "what": "created budget \"Credir Card\"",
+          "when": "2026-08-10T01:37:16.437Z"
+        }
+      ]
+    },
+    "ICICI Bank Loan": {
+      "rows": [
+        {
+          "cat": "Installment",
+          "item": "Bank Loan1",
+          "amt": 0,
+          "paid": 0,
+          "date": "2026-05-01",
+          "inst": {
+            "on": true,
+            "per": 9000,
+            "count": 60,
+            "done": 2
           }
-        ],
-        "cats": [
-          {
-            "id": "Interior Work",
-            "color": "#6ea8fe"
-          },
-          {
-            "id": "Kitchen",
-            "color": "#c58af9"
-          },
-          {
-            "id": "Furniture & Items",
-            "color": "#4fd1c5"
-          },
-          {
-            "id": "Rented Flat",
-            "color": "#e5883a"
-          },
-          {
-            "id": "Appliances",
-            "color": "#e35d8a"
-          },
-          {
-            "id": "Installment",
-            "color": "#f7c948"
-          },
-          {
-            "id": "Creditcards",
-            "color": "#f7c948"
+        },
+        {
+          "cat": "Installment",
+          "item": "Bank Loan 2",
+          "amt": 0,
+          "paid": 0,
+          "date": "",
+          "inst": {
+            "on": true,
+            "per": 9000,
+            "count": 60,
+            "done": 0
           }
-        ],
-        "log": [
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Credit Cards Payment\"",
-            "when": "2026-08-10T18:51:36.191Z"
-          },
-          {
-            "who": "Someone",
-            "what": "renamed budget \"Credir Card\" → \"Credit Card\"",
-            "when": "2026-08-10T18:51:28.496Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Credit Cards Payment\"",
-            "when": "2026-08-10T01:38:33.155Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Credit Cards Payment\"",
-            "when": "2026-08-10T01:38:22.958Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Credit Cards Payment\" — \"New payment\" → \"Credit Cards Payment\"",
-            "when": "2026-08-10T01:37:57.954Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"New payment\"",
-            "when": "2026-08-10T01:37:44.916Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Creditcards\"",
-            "when": "2026-08-10T01:37:41.126Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added category \"Creditcards\"",
-            "when": "2026-08-10T01:37:29.989Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-10T01:37:21.236Z"
-          },
-          {
-            "who": "Someone",
-            "what": "created budget \"Credir Card\"",
-            "when": "2026-08-10T01:37:16.437Z"
+        }
+      ],
+      "cats": [
+        {
+          "id": "Interior Work",
+          "color": "#6ea8fe"
+        },
+        {
+          "id": "Kitchen",
+          "color": "#c58af9"
+        },
+        {
+          "id": "Furniture & Items",
+          "color": "#4fd1c5"
+        },
+        {
+          "id": "Rented Flat",
+          "color": "#e5883a"
+        },
+        {
+          "id": "Appliances",
+          "color": "#e35d8a"
+        },
+        {
+          "id": "Installment",
+          "color": "#f7c948"
+        }
+      ],
+      "log": [
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Bank Loan 2\"",
+          "when": "2026-08-10T19:57:46.975Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Bank Loan 2\"",
+          "when": "2026-08-10T19:57:43.266Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Bank Loan 2\" — \"New payment\" → \"Bank Loan 2\"",
+          "when": "2026-08-10T19:57:36.327Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"New payment\"",
+          "when": "2026-08-10T19:57:30.172Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
+          "when": "2026-08-10T19:57:29.047Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-10T19:57:27.508Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Bank Loan1\" now 2 of 60 paid",
+          "when": "2026-08-10T19:57:18.585Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Bank Loan1\" now 1 of 60 paid",
+          "when": "2026-08-10T19:57:18.269Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Bank Loan1\"",
+          "when": "2026-08-10T19:57:15.198Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Bank Loan1\"",
+          "when": "2026-08-10T19:57:08.336Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Bank Loan1\"",
+          "when": "2026-08-10T19:57:00.824Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Bank Loan1\" — \"01 may 26\" → \"01-May-2026\"",
+          "when": "2026-08-10T19:56:53.666Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Bank Loan1\" — \"01may26\" → \"01 may 26\"",
+          "when": "2026-08-10T19:56:49.482Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed date of \"Bank Loan1\" — \"\" → \"01may26\"",
+          "when": "2026-08-10T19:56:46.130Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Bank Loan1\" — \"Bank Loan\" → \"Bank Loan1\"",
+          "when": "2026-08-10T19:56:06.011Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Bank Loan\" — \"New payment\" → \"Bank Loan\"",
+          "when": "2026-08-10T19:56:03.897Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
+          "when": "2026-08-10T19:55:56.578Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-10T19:55:45.584Z"
+        },
+        {
+          "who": "Someone",
+          "what": "created budget \"ICICI Bank Loan\"",
+          "when": "2026-08-10T19:55:41.646Z"
+        }
+      ]
+    },
+    "Pandit (Kaku)": {
+      "rows": [
+        {
+          "cat": "Installment",
+          "item": "Dnyndeep Loan",
+          "amt": 0,
+          "paid": 0,
+          "date": "",
+          "inst": {
+            "on": true,
+            "per": 24400,
+            "count": 12,
+            "done": 0
           }
-        ]
-      },
-      "ICICI Bank Loan": {
-        "rows": [
-          {
-            "cat": "Installment",
-            "item": "Bank Loan1",
-            "amt": 0,
-            "paid": 0,
-            "date": "2026-05-01",
-            "inst": {
-              "on": true,
-              "per": 9000,
-              "count": 60,
-              "done": 2
-            }
-          },
-          {
-            "cat": "Installment",
-            "item": "Bank Loan 2",
-            "amt": 0,
-            "paid": 0,
-            "date": "",
-            "inst": {
-              "on": true,
-              "per": 9000,
-              "count": 60,
-              "done": 0
-            }
+        },
+        {
+          "cat": "Installment",
+          "item": "Annapurna Loan",
+          "amt": 0,
+          "paid": 0,
+          "date": "",
+          "inst": {
+            "on": true,
+            "per": 11500,
+            "count": 24,
+            "done": 3
           }
-        ],
-        "cats": [
-          {
-            "id": "Interior Work",
-            "color": "#6ea8fe"
-          },
-          {
-            "id": "Kitchen",
-            "color": "#c58af9"
-          },
-          {
-            "id": "Furniture & Items",
-            "color": "#4fd1c5"
-          },
-          {
-            "id": "Rented Flat",
-            "color": "#e5883a"
-          },
-          {
-            "id": "Appliances",
-            "color": "#e35d8a"
-          },
-          {
-            "id": "Installment",
-            "color": "#f7c948"
+        },
+        {
+          "cat": "Installment",
+          "item": "Vehicle Loan",
+          "amt": 0,
+          "paid": 0,
+          "date": "",
+          "inst": {
+            "on": true,
+            "per": 2700,
+            "count": 24,
+            "done": 0
           }
-        ],
-        "log": [
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Bank Loan 2\"",
-            "when": "2026-08-10T19:57:46.975Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Bank Loan 2\"",
-            "when": "2026-08-10T19:57:43.266Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Bank Loan 2\" — \"New payment\" → \"Bank Loan 2\"",
-            "when": "2026-08-10T19:57:36.327Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"New payment\"",
-            "when": "2026-08-10T19:57:30.172Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
-            "when": "2026-08-10T19:57:29.047Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-10T19:57:27.508Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Bank Loan1\" now 2 of 60 paid",
-            "when": "2026-08-10T19:57:18.585Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Bank Loan1\" now 1 of 60 paid",
-            "when": "2026-08-10T19:57:18.269Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Bank Loan1\"",
-            "when": "2026-08-10T19:57:15.198Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Bank Loan1\"",
-            "when": "2026-08-10T19:57:08.336Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Bank Loan1\"",
-            "when": "2026-08-10T19:57:00.824Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Bank Loan1\" — \"01 may 26\" → \"01-May-2026\"",
-            "when": "2026-08-10T19:56:53.666Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Bank Loan1\" — \"01may26\" → \"01 may 26\"",
-            "when": "2026-08-10T19:56:49.482Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed date of \"Bank Loan1\" — \"\" → \"01may26\"",
-            "when": "2026-08-10T19:56:46.130Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Bank Loan1\" — \"Bank Loan\" → \"Bank Loan1\"",
-            "when": "2026-08-10T19:56:06.011Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Bank Loan\" — \"New payment\" → \"Bank Loan\"",
-            "when": "2026-08-10T19:56:03.897Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
-            "when": "2026-08-10T19:55:56.578Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-10T19:55:45.584Z"
-          },
-          {
-            "who": "Someone",
-            "what": "created budget \"ICICI Bank Loan\"",
-            "when": "2026-08-10T19:55:41.646Z"
-          }
-        ]
-      },
-      "Pandit (Kaku)": {
-        "rows": [
-          {
-            "cat": "Installment",
-            "item": "Dnyndeep Loan",
-            "amt": 0,
-            "paid": 0,
-            "date": "",
-            "inst": {
-              "on": true,
-              "per": 24400,
-              "count": 12,
-              "done": 0
-            }
-          },
-          {
-            "cat": "Installment",
-            "item": "Annapurna Loan",
-            "amt": 0,
-            "paid": 0,
-            "date": "",
-            "inst": {
-              "on": true,
-              "per": 11500,
-              "count": 24,
-              "done": 3
-            }
-          },
-          {
-            "cat": "Installment",
-            "item": "Vehicle Loan",
-            "amt": 0,
-            "paid": 0,
-            "date": "",
-            "inst": {
-              "on": true,
-              "per": 2700,
-              "count": 24,
-              "done": 0
-            }
-          }
-        ],
-        "cats": [
-          {
-            "id": "Interior Work",
-            "color": "#6ea8fe"
-          },
-          {
-            "id": "Kitchen",
-            "color": "#c58af9"
-          },
-          {
-            "id": "Furniture & Items",
-            "color": "#4fd1c5"
-          },
-          {
-            "id": "Rented Flat",
-            "color": "#e5883a"
-          },
-          {
-            "id": "Appliances",
-            "color": "#e35d8a"
-          },
-          {
-            "id": "Installment",
-            "color": "#f7c948"
-          }
-        ],
-        "log": [
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Vehicle Loan\"",
-            "when": "2026-08-10T20:03:16.735Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Vehicle Loan\"",
-            "when": "2026-08-10T20:03:12.910Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Vehicle Loan\"",
-            "when": "2026-08-10T20:03:09.717Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Vehicle Loan\"",
-            "when": "2026-08-10T20:03:04.071Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Vehicle Loan\" — \"New payment\" → \"Vehicle Loan\"",
-            "when": "2026-08-10T20:03:03.214Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
-            "when": "2026-08-10T20:02:57.651Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-10T20:02:55.768Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Annapurna Loan\" now 3 of 24 paid",
-            "when": "2026-08-10T20:02:46.423Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Annapurna Loan\" now 2 of 24 paid",
-            "when": "2026-08-10T20:02:45.635Z"
-          },
-          {
-            "who": "Someone",
-            "what": "installments for \"Annapurna Loan\" now 1 of 24 paid",
-            "when": "2026-08-10T20:02:45.343Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Annapurna Loan\"",
-            "when": "2026-08-10T20:02:24.220Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Annapurna Loan\"",
-            "when": "2026-08-10T20:02:19.518Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Annapurna Loan\"",
-            "when": "2026-08-10T20:02:15.647Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Dnyndeep Loan\" — \"DnyandeepLoan\" → \"Dnyndeep Loan\"",
-            "when": "2026-08-10T20:01:54.025Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Annapurna Loan\" — \"Dnyndeep Loan\" → \"Annapurna Loan\"",
-            "when": "2026-08-10T20:01:49.864Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"DnyandeepLoan\" — \"Annapurna Loan\" → \"DnyandeepLoan\"",
-            "when": "2026-08-10T20:01:40.512Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Dnyndeep Loan\"",
-            "when": "2026-08-10T20:00:34.981Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Dnyndeep Loan\"",
-            "when": "2026-08-10T20:00:30.077Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Dnyndeep Loan\"",
-            "when": "2026-08-10T20:00:26.449Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (count) for \"Annapurna Loan\"",
-            "when": "2026-08-10T20:00:18.127Z"
-          },
-          {
-            "who": "Someone",
-            "what": "updated installment (per) for \"Annapurna Loan\"",
-            "when": "2026-08-10T20:00:06.086Z"
-          },
-          {
-            "who": "Someone",
-            "what": "enabled installment plan for \"Annapurna Loan\"",
-            "when": "2026-08-10T19:59:59.119Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Dnyndeep Loan\" — \"New payment\" → \"Dnyndeep Loan\"",
-            "when": "2026-08-10T19:59:40.867Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed item of \"Annapurna Loan\" — \"New payment\" → \"Annapurna Loan\"",
-            "when": "2026-08-10T19:59:21.696Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
-            "when": "2026-08-10T19:59:16.314Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-10T19:59:15.002Z"
-          },
-          {
-            "who": "Someone",
-            "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
-            "when": "2026-08-10T19:59:14.492Z"
-          },
-          {
-            "who": "Someone",
-            "what": "added a new payment",
-            "when": "2026-08-10T19:59:12.730Z"
-          },
-          {
-            "who": "Someone",
-            "what": "created budget \"Pandit (Kaku)\"",
-            "when": "2026-08-10T19:59:09.590Z"
-          }
-        ]
-      }
+        }
+      ],
+      "cats": [
+        {
+          "id": "Interior Work",
+          "color": "#6ea8fe"
+        },
+        {
+          "id": "Kitchen",
+          "color": "#c58af9"
+        },
+        {
+          "id": "Furniture & Items",
+          "color": "#4fd1c5"
+        },
+        {
+          "id": "Rented Flat",
+          "color": "#e5883a"
+        },
+        {
+          "id": "Appliances",
+          "color": "#e35d8a"
+        },
+        {
+          "id": "Installment",
+          "color": "#f7c948"
+        }
+      ],
+      "log": [
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Vehicle Loan\"",
+          "when": "2026-08-10T20:03:16.735Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Vehicle Loan\"",
+          "when": "2026-08-10T20:03:12.910Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Vehicle Loan\"",
+          "when": "2026-08-10T20:03:09.717Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Vehicle Loan\"",
+          "when": "2026-08-10T20:03:04.071Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Vehicle Loan\" — \"New payment\" → \"Vehicle Loan\"",
+          "when": "2026-08-10T20:03:03.214Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
+          "when": "2026-08-10T20:02:57.651Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-10T20:02:55.768Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Annapurna Loan\" now 3 of 24 paid",
+          "when": "2026-08-10T20:02:46.423Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Annapurna Loan\" now 2 of 24 paid",
+          "when": "2026-08-10T20:02:45.635Z"
+        },
+        {
+          "who": "Someone",
+          "what": "installments for \"Annapurna Loan\" now 1 of 24 paid",
+          "when": "2026-08-10T20:02:45.343Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Annapurna Loan\"",
+          "when": "2026-08-10T20:02:24.220Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Annapurna Loan\"",
+          "when": "2026-08-10T20:02:19.518Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Annapurna Loan\"",
+          "when": "2026-08-10T20:02:15.647Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Dnyndeep Loan\" — \"DnyandeepLoan\" → \"Dnyndeep Loan\"",
+          "when": "2026-08-10T20:01:54.025Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Annapurna Loan\" — \"Dnyndeep Loan\" → \"Annapurna Loan\"",
+          "when": "2026-08-10T20:01:49.864Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"DnyandeepLoan\" — \"Annapurna Loan\" → \"DnyandeepLoan\"",
+          "when": "2026-08-10T20:01:40.512Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Dnyndeep Loan\"",
+          "when": "2026-08-10T20:00:34.981Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Dnyndeep Loan\"",
+          "when": "2026-08-10T20:00:30.077Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Dnyndeep Loan\"",
+          "when": "2026-08-10T20:00:26.449Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (count) for \"Annapurna Loan\"",
+          "when": "2026-08-10T20:00:18.127Z"
+        },
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Annapurna Loan\"",
+          "when": "2026-08-10T20:00:06.086Z"
+        },
+        {
+          "who": "Someone",
+          "what": "enabled installment plan for \"Annapurna Loan\"",
+          "when": "2026-08-10T19:59:59.119Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Dnyndeep Loan\" — \"New payment\" → \"Dnyndeep Loan\"",
+          "when": "2026-08-10T19:59:40.867Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed item of \"Annapurna Loan\" — \"New payment\" → \"Annapurna Loan\"",
+          "when": "2026-08-10T19:59:21.696Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
+          "when": "2026-08-10T19:59:16.314Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-10T19:59:15.002Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed cat of \"New payment\" — \"Interior Work\" → \"Installment\"",
+          "when": "2026-08-10T19:59:14.492Z"
+        },
+        {
+          "who": "Someone",
+          "what": "added a new payment",
+          "when": "2026-08-10T19:59:12.730Z"
+        },
+        {
+          "who": "Someone",
+          "what": "created budget \"Pandit (Kaku)\"",
+          "when": "2026-08-10T19:59:09.590Z"
+        }
+      ]
     }
-  },
-  "exportedBy": "Someone",
-  "at": "2026-08-10T20:03:30.691Z"
+  }
 }

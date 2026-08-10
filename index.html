@@ -228,18 +228,24 @@ function loadStore(){
 var store=loadStore();
 var dataStatus='';var dataStamp='';
 function normalizeStore(st){
+  if(st&&st.store&&st.store.budgets)st=st.store; /* accept JSON-export wrapper {store,exportedBy,at} */
   if(!st||!st.budgets)return null;
   if(!st.budgets[st.active])st.active=Object.keys(st.budgets)[0];
-  for(var bn in st.budgets){if(!st.budgets.hasOwnProperty(bn))continue;var b=st.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation')c.id='Installment';});(b.rows||[]).forEach(function(r){if(r.cat==='Installation')r.cat='Installment';});if(!b.log)b.log=[];}
+  for(var bn in st.budgets){if(!st.budgets.hasOwnProperty(bn))continue;var b=st.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation')c.id='Installment';});(b.rows||[]).forEach(function(r){if(r.cat==='Installation')r.cat='Installment';});if(!b.log)b.log=[];if(!b.cats)b.cats=defaultCats();}
   return st;
 }
 function fetchData(){
   var url=DATA_URL+'?v='+Date.now();
-  return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(j){
-    var st=normalizeStore(j);
-    if(st){store=st;store.active=ALL;dataStatus='loaded';dataStamp=new Date().toLocaleTimeString();}
-    else{dataStatus='fallback';}
-  }).catch(function(err){dataStatus='fallback';dataErr=(err&&err.message)||'fetch failed';store.active=ALL;});
+  return fetch(url,{cache:'no-store'}).then(function(r){
+    if(!r.ok)throw new Error('NET: HTTP '+r.status+' (file not found at '+DATA_URL+')');
+    return r.text().then(function(txt){
+      var j;
+      try{j=JSON.parse(txt);}catch(pe){throw new Error('PARSE: data.json is not valid JSON \u2014 '+pe.message);}
+      var st=normalizeStore(j);
+      if(!st)throw new Error('SHAPE: data.json loaded but has no "budgets" \u2014 wrong file structure');
+      store=st;store.active=ALL;dataStatus='loaded';dataStamp=new Date().toLocaleTimeString();dataErr='';
+    });
+  }).catch(function(err){dataStatus='fallback';dataErr=(err&&err.message)||'unknown error';try{store.active=ALL;}catch(e){}});
 }
 var dataErr='';
 function reloadData(){dataStatus='';document.getElementById('app').innerHTML='<div class="empty">Reloading data\u2026</div>';fetchData().then(function(){render();flash(dataStatus==='loaded'?'Loaded from data.json':'Could not load data.json');});}
@@ -487,7 +493,7 @@ function budgetCatColor(bn,cid){var cs=store.budgets[bn].cats||[];for(var i=0;i<
 
 function statusBanner(){
   if(dataStatus==='loaded')return '<div class="note" style="background:var(--paidbg);border-color:var(--paidLine);color:var(--paid)">\u2713 Loaded from data.json'+(dataStamp?(' at '+dataStamp):'')+'. <a href="#" onclick="reloadData();return false" style="color:inherit;text-decoration:underline">Reload</a></div>';
-  if(dataStatus==='fallback')return '<div class="note" style="background:var(--pendbg);border-color:var(--pendLine);color:var(--pend)">\u26A0 Could not load data.json'+(dataErr?(' ('+dataErr+')'):'')+' \u2014 showing built-in/local copy. Check the file is in the repo next to index.html. <a href="#" onclick="reloadData();return false" style="color:inherit;text-decoration:underline">Try again</a></div>';
+  if(dataStatus==='fallback')return '<div class="note" style="background:var(--pendbg);border-color:var(--pendLine);color:var(--pend)">\u26A0 Not showing data.json \u2014 <b>'+(dataErr||'unknown')+'</b>. <a href="#" onclick="reloadData();return false" style="color:inherit;text-decoration:underline">Try again</a></div>';
   return '';
 }
 function render(){
