@@ -1,5 +1,5 @@
 {
-  "active": "Pandit (Kaku)",
+  "active": "⊞ All Budgets",
   "budgets": {
     "Home Improvements": {
       "rows": [
@@ -568,7 +568,8 @@
           "what": "changed amt of \"Interior work – advance (68.89%)\" — ₹4,75,000 → ₹7,30,000",
           "when": "2026-08-09T16:24:44.659Z"
         }
-      ]
+      ],
+      "type": "spending"
     },
     "Credit Card": {
       "rows": [
@@ -580,7 +581,7 @@
           "date": "",
           "inst": {
             "on": true,
-            "per": 100000,
+            "per": 10000,
             "count": 20,
             "done": 0
           }
@@ -617,6 +618,11 @@
         }
       ],
       "log": [
+        {
+          "who": "Someone",
+          "what": "updated installment (per) for \"Credit Cards Payment\"",
+          "when": "2026-08-10T20:43:16.420Z"
+        },
         {
           "who": "Someone",
           "what": "updated installment (count) for \"Credit Cards Payment\"",
@@ -667,7 +673,8 @@
           "what": "created budget \"Credir Card\"",
           "when": "2026-08-10T01:37:16.437Z"
         }
-      ]
+      ],
+      "type": "spending"
     },
     "ICICI Bank Loan": {
       "rows": [
@@ -725,6 +732,21 @@
         }
       ],
       "log": [
+        {
+          "who": "Someone",
+          "what": "set budget type to Loan / Funding",
+          "when": "2026-08-10T20:41:35.620Z"
+        },
+        {
+          "who": "Someone",
+          "what": "set budget type to Spending",
+          "when": "2026-08-10T20:41:34.771Z"
+        },
+        {
+          "who": "Someone",
+          "what": "set budget type to Loan / Funding",
+          "when": "2026-08-10T20:41:31.796Z"
+        },
         {
           "who": "Someone",
           "what": "updated installment (count) for \"Bank Loan 2\"",
@@ -820,7 +842,8 @@
           "what": "created budget \"ICICI Bank Loan\"",
           "when": "2026-08-10T19:55:41.646Z"
         }
-      ]
+      ],
+      "type": "loan"
     },
     "Pandit (Kaku)": {
       "rows": [
@@ -1036,7 +1059,8 @@
           "what": "created budget \"Pandit (Kaku)\"",
           "when": "2026-08-10T19:59:09.590Z"
         }
-      ]
+      ],
+      "type": "spending"
     }
   }
 }
