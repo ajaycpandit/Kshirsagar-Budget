@@ -148,6 +148,8 @@
     <input type="file" id="imp" accept=".json" style="display:none" onchange="doImport(event)">
     <button onclick="showLog()">&#128339; Log</button>
     <button onclick="window.print()">&#128424;&#65039;</button>
+    <button onclick="saveAsMaster()" title="Bake current data into a downloadable index.html">&#11088; Save as master</button>
+    <button onclick="resetToMaster()" title="Reload the owner's master data">&#8635; Reset to master</button>
     <button class="danger" onclick="clearAll()">Clear</button>
     <button id="themeBtn" onclick="toggleTheme()" title="Switch light/dark">&#9790;</button>
     <button class="danger" onclick="lock()">Lock</button>
@@ -203,8 +205,20 @@ function seedRows(){return[
 ];}
 
 var STORE='home_expense_tracker_v3';
-function loadStore(){try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
-  return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};}
+/* ===== MASTER SNAPSHOT (baked in by the owner via "Save as master") ===== */
+var MASTER_VERSION=1;
+/*MASTER_START*/var MASTER=null;/*MASTER_END*/ /* null = built-in seed; owner bakes data here */
+function masterStore(){
+  if(MASTER&&MASTER.budgets)return JSON.parse(JSON.stringify(MASTER));
+  return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};
+}
+function loadStore(){
+  var seenV=null;try{seenV=+localStorage.getItem(STORE+'_mv');}catch(e){}
+  /* If the published master is newer than what this browser last saw, adopt master. */
+  if(seenV!==MASTER_VERSION){var ms=masterStore();try{localStorage.setItem(STORE,JSON.stringify(ms));localStorage.setItem(STORE+'_mv',String(MASTER_VERSION));}catch(e){}return ms;}
+  try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
+  return masterStore();
+}
 var store=loadStore();
 if(store.active===ALL)store.active=Object.keys(store.budgets)[0];
 (function migrateInstallation(){var changed=false;for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;var b=store.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation'){c.id='Installment';changed=true;}});(b.rows||[]).forEach(function(r){if(r.cat==='Installation'){r.cat='Installment';changed=true;}});}if(changed)localStorage.setItem(STORE,JSON.stringify(store));})();
@@ -273,6 +287,21 @@ function flash(m){var f=document.getElementById('flash');f.textContent=m;f.class
 
 /* ---- export ---- */
 function doExportJSON(){var blob=new Blob([JSON.stringify({store:store,exportedBy:who(),at:new Date().toISOString()},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='home-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+function resetToMaster(){if(!confirm('Discard this device\u2019s local changes and reload the owner\u2019s master data?'))return;var ms=masterStore();store=ms;try{localStorage.setItem(STORE,JSON.stringify(ms));localStorage.setItem(STORE+'_mv',String(MASTER_VERSION));}catch(e){}render();flash('Reset to master');}
+function saveAsMaster(){
+  if(typeof document==='undefined')return;
+  var html=document.documentElement.outerHTML;
+  var snapshot=JSON.stringify(store);
+  var newV=MASTER_VERSION+1;
+  html=html.replace(/var MASTER_VERSION=\d+;/, 'var MASTER_VERSION='+newV+';');
+  var startM='/*MASTER_START*/',endM='/*MASTER_END*/';
+  var si=html.indexOf(startM),ei=html.indexOf(endM);
+  if(si!==-1&&ei!==-1&&ei>si){html=html.slice(0,si+startM.length)+'var MASTER='+snapshot+';'+html.slice(ei);}
+  else{alert('Could not locate the master marker \u2014 export JSON instead.');return;}
+  var blob=new Blob(['<!DOCTYPE html>\n'+html],{type:'text/html'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();
+  flash('Master file downloaded \u2014 replace index.html in your repo');
+}
 function doExportExcel(){
   if(typeof XLSX==='undefined'){alert('Excel library still loading, try again in a moment.');return;}
   var wb=XLSX.utils.book_new();
