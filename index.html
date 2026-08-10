@@ -172,9 +172,13 @@ var STORE='home_expense_tracker_v3';
 function loadStore(){try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
   return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};}
 var store=loadStore();
+if(store.active===ALL)store.active=Object.keys(store.budgets)[0];
 (function migrateInstallation(){var changed=false;for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;var b=store.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation'){c.id='Installment';changed=true;}});(b.rows||[]).forEach(function(r){if(r.cat==='Installation'){r.cat='Installment';changed=true;}});}if(changed)localStorage.setItem(STORE,JSON.stringify(store));})();
 if(!store.budgets[store.active])store.active=Object.keys(store.budgets)[0];
 var filterCat='All',filterStatus='All',viewLog=false;
+var ALL='\u229E All Budgets';
+var filterBudget='All';
+function isAll(){return store.active===ALL;}
 var colW=JSON.parse(localStorage.getItem('het_colw')||'null');
 document.getElementById('who').value=localStorage.getItem('het_who')||'';
 
@@ -192,14 +196,15 @@ function lock(){sessionStorage.removeItem('het_unlocked');document.getElementByI
 if(sessionStorage.getItem('het_unlocked')==='1')document.getElementById('lock').style.display='none';
 
 /* ---- budgets ---- */
-function refreshBudgetSel(){var sel=document.getElementById('budgetsel');sel.innerHTML=Object.keys(store.budgets).map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');document.getElementById('subline').textContent=store.active+' \u00B7 partial & installment plans';}
-function switchBudget(n){store.active=n;filterCat='All';filterStatus='All';persist();render();}
+function refreshBudgetSel(){var sel=document.getElementById('budgetsel');var names=Object.keys(store.budgets);var opts=names.map(function(n){return '<option '+(n===store.active?'selected':'')+'>'+n.replace(/</g,'&lt;')+'</option>';}).join('');opts+='<option '+(store.active===ALL?'selected':'')+' style="font-weight:bold">'+ALL+'</option>';sel.innerHTML=opts;document.getElementById('subline').textContent=(isAll()?'All budgets combined':store.active)+' \u00B7 partial & installment plans';}
+function switchBudget(n){store.active=n;filterCat='All';filterStatus='All';filterBudget='All';if(n!==ALL)persist();render();}
+function allRows(){var out=[];for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;store.budgets[bn].rows.forEach(function(r){out.push({r:r,budget:bn});});}return out;}
 function addBudget(){var n=prompt('Name for the new budget:');if(!n)return;n=n.trim();if(!n)return;if(store.budgets[n]){alert('That name exists.');return;}var empty=confirm('OK = start EMPTY.\nCancel = copy current categories (no rows).');store.budgets[n]={rows:[],cats:empty?defaultCats():JSON.parse(JSON.stringify(cats())),log:[]};store.active=n;record('created budget "'+n+'"');persist();render();}
-function renameBudget(){var old=store.active,n=prompt('Rename budget:',old);if(!n)return;n=n.trim();if(!n||n===old)return;if(store.budgets[n]){alert('Name taken.');return;}store.budgets[n]=store.budgets[old];delete store.budgets[old];store.active=n;record('renamed budget "'+old+'" \u2192 "'+n+'"');persist();render();}
-function deleteBudget(){if(Object.keys(store.budgets).length<=1){alert('Need at least one budget.');return;}if(!confirm('Delete budget "'+store.active+'"?'))return;delete store.budgets[store.active];store.active=Object.keys(store.budgets)[0];persist();render();}
+function renameBudget(){if(isAll()){alert('Pick a specific budget to rename.');return;}var old=store.active,n=prompt('Rename budget:',old);if(!n)return;n=n.trim();if(!n||n===old)return;if(store.budgets[n]){alert('Name taken.');return;}store.budgets[n]=store.budgets[old];delete store.budgets[old];store.active=n;record('renamed budget "'+old+'" \u2192 "'+n+'"');persist();render();}
+function deleteBudget(){if(isAll()){alert('Pick a specific budget to delete.');return;}if(Object.keys(store.budgets).length<=1){alert('Need at least one budget.');return;}if(!confirm('Delete budget "'+store.active+'"?'))return;delete store.budgets[store.active];store.active=Object.keys(store.budgets)[0];persist();render();}
 
 /* ---- categories ---- */
-function addCategory(){var n=prompt('New category name:');if(!n)return;n=n.trim();if(!n)return;if(catColor(n)!=='#9aa3b2'&&cats().some(function(c){return c.id===n;})){alert('That category exists.');return;}var col=PALETTE[cats().length%PALETTE.length];cats().push({id:n,color:col});record('added category "'+n+'"');persist();render();}
+function addCategory(){if(isAll()){alert('Pick a specific budget to add a category.');return;}var n=prompt('New category name:');if(!n)return;n=n.trim();if(!n)return;if(catColor(n)!=='#9aa3b2'&&cats().some(function(c){return c.id===n;})){alert('That category exists.');return;}var col=PALETTE[cats().length%PALETTE.length];cats().push({id:n,color:col});record('added category "'+n+'"');persist();render();}
 
 /* ---- edit ---- */
 function edit(i,field,el){
@@ -215,9 +220,9 @@ function toggleInst(i){var r=rows()[i];if(!r.inst)r.inst={on:false,per:0,count:0
 function instStep(i,d){var r=rows()[i];if(!r.inst)return;var nd=(+r.inst.done||0)+d;if(nd<0)nd=0;if(nd>(+r.inst.count||0))nd=+r.inst.count||0;r.inst.done=nd;record('installments for "'+r.item+'" now '+nd+' of '+(r.inst.count||0)+' paid');persist();render();}
 function markPaid(i){var r=rows()[i];if(isInst(r)){r.inst.done=+r.inst.count||0;}else{r.paid=+r.amt||0;}record('marked "'+r.item+'" fully Paid');persist();render();}
 function markUnpaid(i){var r=rows()[i];if(isInst(r)){r.inst.done=0;}else{r.paid=0;}record('reset "'+r.item+'" to Pending');persist();render();}
-function addRow(){rows().push({cat:filterCat!=='All'?filterCat:cats()[0].id,item:'New payment',amt:0,paid:0,date:'',inst:{on:false,per:0,count:0,done:0}});record('added a new payment');persist();render();}
+function addRow(){if(isAll()){alert('Pick a specific budget to add a payment.');return;}rows().push({cat:filterCat!=='All'?filterCat:cats()[0].id,item:'New payment',amt:0,paid:0,date:'',inst:{on:false,per:0,count:0,done:0}});record('added a new payment');persist();render();}
 function delRow(i){record('deleted "'+rows()[i].item+'"');rows().splice(i,1);persist();render();}
-function clearAll(){if(!confirm('Delete ALL rows in this budget? Categories and log are kept.'))return;cur().rows=[];record('cleared all rows');persist();render();flash('Cleared');}
+function clearAll(){if(isAll()){alert('Pick a specific budget to clear.');return;}if(!confirm('Delete ALL rows in this budget? Categories and log are kept.'))return;cur().rows=[];record('cleared all rows');persist();render();flash('Cleared');}
 
 function sumTot(a){return a.reduce(function(x,r){return x+rowTotal(r);},0);}
 function sumPaid(a){return a.reduce(function(x,r){return x+rowPaid(r);},0);}
@@ -228,6 +233,21 @@ function doExportJSON(){var blob=new Blob([JSON.stringify({store:store,exportedB
 function doExportExcel(){
   if(typeof XLSX==='undefined'){alert('Excel library still loading, try again in a moment.');return;}
   var wb=XLSX.utils.book_new();
+  if(isAll()){
+    var head=['Budget','Category','Item','Date','Total','Paid','Remaining','Status','Installment?','Per Installment','Count','Paid Count'];
+    var aoa=[head];var all=allRows();
+    all.forEach(function(o){var r=o.r;aoa.push([o.budget,r.cat,r.item,fmtDate(r.date),rowTotal(r),rowPaid(r),remainOf(r),statusOf(r),isInst(r)?'Yes':'No',isInst(r)?(+r.inst.per||0):'',isInst(r)?(+r.inst.count||0):'',isInst(r)?(+r.inst.done||0):'']);});
+    var gt=all.reduce(function(x,o){return x+rowTotal(o.r);},0),gp=all.reduce(function(x,o){return x+rowPaid(o.r);},0);
+    aoa.push([]);aoa.push(['GRAND TOTAL','','','',gt,gp,gt-gp]);
+    var ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=[{wch:16},{wch:18},{wch:34},{wch:13},{wch:12},{wch:12},{wch:12},{wch:10},{wch:12},{wch:14},{wch:8},{wch:10}];
+    XLSX.utils.book_append_sheet(wb,ws,'All Payments');
+    var bud=[['Budget','Total','Paid','Remaining']];
+    Object.keys(store.budgets).forEach(function(bn){var br=store.budgets[bn].rows;var ct=br.reduce(function(x,r){return x+rowTotal(r);},0),cp=br.reduce(function(x,r){return x+rowPaid(r);},0);bud.push([bn,ct,cp,ct-cp]);});
+    var ws3=XLSX.utils.aoa_to_sheet(bud);ws3['!cols']=[{wch:20},{wch:12},{wch:12},{wch:12}];
+    XLSX.utils.book_append_sheet(wb,ws3,'By Budget');
+    XLSX.writeFile(wb,'all-budgets-'+new Date().toISOString().slice(0,10)+'.xlsx');
+    return;
+  }
   var head=['Category','Item','Date','Total','Paid','Remaining','Status','Installment?','Per Installment','Count','Paid Count'];
   var aoa=[head];
   rows().forEach(function(r){aoa.push([r.cat,r.item,fmtDate(r.date),rowTotal(r),rowPaid(r),remainOf(r),statusOf(r),isInst(r)?'Yes':'No',isInst(r)?(+r.inst.per||0):'',isInst(r)?(+r.inst.count||0):'',isInst(r)?(+r.inst.done||0):'']);});
@@ -266,9 +286,73 @@ function statusPill(i){return '<span class="status '+statusOf(rows()[i])+'">'+st
 function quickBtn(i){var st=statusOf(rows()[i]);if(st==='Paid')return '<button class="rowbtn" onclick="markUnpaid('+i+')" title="Reset">&#8635;</button>';return '<button class="rowbtn" onclick="markPaid('+i+')" title="Mark fully paid">&#10003;</button>';}
 function moneyIn(i,field,val){return '<span class="moneywrap"><input class="cell num" value="'+val+'" onchange="edit('+i+',\''+field+'\',this)"></span>';}
 
+function renderAll(app){
+  var all=allRows();
+  var total=all.reduce(function(x,o){return x+rowTotal(o.r);},0);
+  var paid=all.reduce(function(x,o){return x+rowPaid(o.r);},0);
+  var owed=total-paid,pct=total?Math.round(paid/total*100):0;
+  var s='<div class="grid">'+
+    '<div class="stat"><div class="lbl">Grand Total (all budgets)</div><div class="val">'+RS(total)+'</div></div>'+
+    '<div class="stat paid"><div class="lbl">Paid so far</div><div class="val">'+RS(paid)+'</div></div>'+
+    '<div class="stat pend"><div class="lbl">Still Owed</div><div class="val">'+RS(owed)+'</div></div>'+
+    '<div class="stat"><div class="lbl">Progress</div><div class="val">'+pct+'%</div><div class="bar"><span style="width:'+pct+'%;background:var(--paid)"></span><span style="width:'+(100-pct)+'%;background:var(--pendbg)"></span></div></div>'+
+    '</div>';
+
+  // per-budget breakdown
+  var names=Object.keys(store.budgets);
+  s+='<div class="catwrap"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">By Budget (paid vs total)</div>';
+  names.forEach(function(bn,bi){
+    var br=store.budgets[bn].rows;var ct=br.reduce(function(x,r){return x+rowTotal(r);},0),cp=br.reduce(function(x,r){return x+rowPaid(r);},0);
+    var cpct=ct?Math.round(cp/ct*100):0;var col=PALETTE[bi%PALETTE.length];
+    s+='<div class="catrow"><span class="dot" style="background:'+col+'"></span><span class="nm" style="cursor:pointer" onclick="switchBudget(\''+bn.replace(/'/g,"\\'")+'\')">'+bn+'</span><span class="track"><span style="width:'+cpct+'%;background:'+col+'"></span></span><span class="amt">'+RS(cp)+' / '+RS(ct)+'</span></div>';
+  });
+  s+='</div>';
+
+  // budget filter + status filter
+  s+='<div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">BUDGET:</span>'+
+     ['All'].concat(names).map(function(n){return '<span class="fbtn '+(filterBudget===n?'active':'')+'" onclick="filterBudget=\''+(''+n).replace(/'/g,"\\'")+'\';render()">'+n+'</span>';}).join('')+'</div>';
+  s+='<div class="filters"><span style="color:var(--muted);font-size:11px;margin-right:4px">STATUS:</span>'+
+     ['All','Paid','Partial','Pending'].map(function(st){return '<span class="fbtn '+(filterStatus===st?'active':'')+'" onclick="filterStatus=\''+st+'\';render()">'+st+'</span>';}).join('')+'</div>';
+
+  var list=all.filter(function(o){return (filterBudget==='All'||o.budget===filterBudget)&&(filterStatus==='All'||statusOf(o.r)===filterStatus);});
+  list.sort(function(a,b){return (a.r.date||'').localeCompare(b.r.date||'');});
+
+  // desktop merged table (read-only)
+  var t='<div class="desktop-table"><table style="table-layout:auto"><tr><th>Budget</th><th>Category</th><th>Item</th><th>Date</th><th class="num">Total</th><th class="num">Paid</th><th class="num">Remaining</th><th>Status</th></tr>';
+  if(!list.length)t+='<tr><td colspan="8"><div class="empty">No payments match this filter.</div></td></tr>';
+  list.forEach(function(o){var r=o.r;
+    t+='<tr><td><span style="font-size:12px;color:var(--muted)">'+o.budget+'</span></td>'+
+      '<td><span class="catpill"><span class="dot" style="background:'+budgetCatColor(o.budget,r.cat)+'"></span>'+r.cat+'</span></td>'+
+      '<td>'+(r.item||'')+(isInst(r)?' <span class="inst">('+(r.inst.done||0)+' of '+(r.inst.count||0)+')</span>':'')+'</td>'+
+      '<td>'+fmtDate(r.date)+'</td>'+
+      '<td class="num">'+RS(rowTotal(r))+'</td><td class="num">'+RS(rowPaid(r))+'</td>'+
+      '<td class="num" style="color:var(--muted)">'+RS(remainOf(r))+'</td>'+
+      '<td><span class="status '+statusOf(r)+'">'+statusOf(r)+'</span></td></tr>';
+  });
+  var ft=list.reduce(function(x,o){return x+rowTotal(o.r);},0),fp=list.reduce(function(x,o){return x+rowPaid(o.r);},0);
+  t+='<tr class="totalrow"><td></td><td></td><td>Showing '+list.length+' item(s)</td><td></td><td class="num">'+RS(ft)+'</td><td class="num">'+RS(fp)+'</td><td class="num">'+RS(ft-fp)+'</td><td></td></tr></table></div>';
+
+  // mobile cards (read-only)
+  var m='<div class="cards">';
+  if(!list.length)m+='<div class="empty">No payments match this filter.</div>';
+  list.forEach(function(o){var r=o.r;
+    m+='<div class="pcard"><div class="top"><div style="flex:1"><span style="font-size:11px;color:var(--accent);font-weight:bold">'+o.budget+'</span><br><span class="catpill"><span class="dot" style="background:'+budgetCatColor(o.budget,r.cat)+'"></span><span style="font-size:11px;color:var(--muted)">'+r.cat+'</span></span></div><span class="status '+statusOf(r)+'">'+statusOf(r)+'</span></div>'+
+      '<div style="font-weight:bold;margin-bottom:6px">'+(r.item||'')+(isInst(r)?' <span class="inst">('+(r.inst.done||0)+' of '+(r.inst.count||0)+')</span>':'')+'</div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">'+fmtDate(r.date)+'</span><span>Total '+RS(rowTotal(r))+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px"><span style="color:var(--paid)">Paid '+RS(rowPaid(r))+'</span><span style="color:var(--muted)">Remaining '+RS(remainOf(r))+'</span></div></div>';
+  });
+  m+='</div>';
+
+  s+=t+m;
+  s+='<div class="note">This is the <b>combined view</b> across all budgets \u2014 totals rolled up, every row merged with its <b>Budget</b> shown. Rows here are <b>read-only</b>; to edit one, switch to that budget in the dropdown (or tap its name above). Excel/JSON export includes every budget.</div>';
+  app.innerHTML=s;
+}
+function budgetCatColor(bn,cid){var cs=store.budgets[bn].cats||[];for(var i=0;i<cs.length;i++)if(cs[i].id===cid)return cs[i].color;return '#9aa3b2';}
+
 function render(){
   refreshBudgetSel();
   var app=document.getElementById('app');
+  if(isAll()){renderAll(app);return;}
   if(viewLog){
     var log=cur().log;
     app.innerHTML='<div class="note">Change history for <b>'+store.active+'</b>, stored in <b>this browser only</b>. <a href="#" onclick="showLog();return false" style="color:var(--accent)">&larr; back</a></div>'+
