@@ -52,7 +52,7 @@
   .cell.num{text-align:right;font-variant-numeric:tabular-nums}
   select.cell{cursor:pointer}
   .moneywrap{position:relative;display:block}
-  .moneywrap::before{content:'\u20B9';position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none}
+  .moneywrap::before{content:'\20B9';position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none}
   .moneywrap .cell{padding-left:20px}
   .catpill{display:inline-flex;align-items:center;gap:6px}
   .status{border-radius:20px;padding:5px 11px;border:1px solid var(--line);font-weight:bold;font-size:12px;white-space:nowrap;display:inline-block;text-align:center}
@@ -149,7 +149,7 @@ function remainOf(r){return Math.max(0,rowTotal(r)-rowPaid(r));}
 function defaultCats(){return[
   {id:'Interior Work',color:'#6ea8fe'},{id:'Kitchen',color:'#c58af9'},
   {id:'Furniture & Items',color:'#4fd1c5'},{id:'Rented Flat',color:'#e5883a'},
-  {id:'Appliances',color:'#e35d8a'},{id:'Installation',color:'#f7c948'}
+  {id:'Appliances',color:'#e35d8a'},{id:'Installment',color:'#f7c948'}
 ];}
 function seedRows(){return[
   {cat:'Interior Work',item:'Interior work \u2013 advance (68.89%)',amt:475000,paid:475000,date:'2026-05-15'},
@@ -172,6 +172,7 @@ var STORE='home_expense_tracker_v3';
 function loadStore(){try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}
   return {active:'Home Interior',budgets:{'Home Interior':{rows:seedRows(),cats:defaultCats(),log:[]}}};}
 var store=loadStore();
+(function migrateInstallation(){var changed=false;for(var bn in store.budgets){if(!store.budgets.hasOwnProperty(bn))continue;var b=store.budgets[bn];(b.cats||[]).forEach(function(c){if(c.id==='Installation'){c.id='Installment';changed=true;}});(b.rows||[]).forEach(function(r){if(r.cat==='Installation'){r.cat='Installment';changed=true;}});}if(changed)localStorage.setItem(STORE,JSON.stringify(store));})();
 if(!store.budgets[store.active])store.active=Object.keys(store.budgets)[0];
 var filterCat='All',filterStatus='All',viewLog=false;
 var colW=JSON.parse(localStorage.getItem('het_colw')||'null');
