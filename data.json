@@ -1,5 +1,5 @@
 {
-  "active": "⊞ All Budgets",
+  "active": "Home Improvements",
   "budgets": {
     "Home Improvements": {
       "rows": [
@@ -21,7 +21,7 @@
           "cat": "Furniture & Items",
           "item": "Sofa (advance + 2nd)",
           "amt": 70000,
-          "paid": 35000,
+          "paid": 70000,
           "date": "2026-06-01"
         },
         {
@@ -148,6 +148,21 @@
         }
       ],
       "log": [
+        {
+          "who": "Someone",
+          "what": "marked \"Sofa (advance + 2nd)\" fully Paid",
+          "when": "2026-08-11T03:11:00.122Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid of \"Sofa (advance + 2nd)\" — ₹70,000 → ₹35,000",
+          "when": "2026-08-11T03:10:57.995Z"
+        },
+        {
+          "who": "Someone",
+          "what": "changed paid of \"Sofa (advance + 2nd)\" — ₹35,000 → ₹70,000",
+          "when": "2026-08-11T03:10:52.356Z"
+        },
         {
           "who": "Someone",
           "what": "changed paid of \"Kitchen Remodeling\" — ₹55,000 → ₹5,50,000",
