@@ -78,6 +78,23 @@
   .empty{color:var(--muted);padding:24px;text-align:center}
   .cards{display:none}
   .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  /* mobile two-line status rows */
+  .mrows{display:none}
+  .mrow{border-bottom:1px solid var(--line)}
+  .mrow:last-child{border-bottom:none}
+  .mrowhead{padding:10px 12px;cursor:pointer;border-left:4px solid transparent}
+  .mrow.Paid .mrowhead{background:var(--paidbg);border-left-color:var(--paid)}
+  .mrow.Partial .mrowhead{background:var(--partbg);border-left-color:var(--part)}
+  .mrow.Pending .mrowhead{background:var(--pendbg);border-left-color:var(--pend)}
+  .mrowtop{display:flex;align-items:center;gap:8px}
+  .mrowtop .nm{flex:1;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mrownums{font-size:12px;margin-top:4px;font-variant-numeric:tabular-nums;opacity:.9}
+  .mrownums b{font-weight:bold}
+  .mrow.Paid .mrownums{color:var(--paid)} .mrow.Partial .mrownums{color:var(--part)} .mrow.Pending .mrownums{color:var(--pend)}
+  .mrowedit{padding:12px;background:var(--panel);border-top:1px dashed var(--line)}
+  .mrowedit .two{display:flex;gap:10px;margin-bottom:8px}.mrowedit .two>div{flex:1}
+  .mrowedit label{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+  .mrowedit .cell{background:var(--panel2);border:1px solid var(--line)}
   .pcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
   .pcard .fld{margin-bottom:10px}
   .pcard .fld label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
@@ -98,6 +115,8 @@
   .loanbadge{font-size:10px;font-weight:bold;color:var(--part);background:var(--partbg);border:1px solid var(--partLine);border-radius:20px;padding:2px 9px;text-transform:uppercase;letter-spacing:.5px}
   .loancard{border-color:var(--partLine)}
   .loancard .bhead{background:linear-gradient(90deg,var(--partbg),transparent)}
+  .bcardact{display:flex;gap:8px;padding:0 16px 14px;flex-wrap:wrap}
+  .bcardact button{flex:1;min-width:120px}
   .bcardstats .stat{padding:10px 12px}
   .bcardstats .stat .val{font-size:17px;margin-top:3px}
   @media(max-width:820px){.bcardstats{grid-template-columns:repeat(2,1fr)}}
@@ -126,7 +145,8 @@
   .lockbox button{width:100%}.lockerr{color:var(--danger);font-size:12px;height:16px;margin-top:6px}
   @media(max-width:820px){
     .desktop-table{display:none}
-    .cards{display:block}
+    .cards{display:none}
+    .mrows{display:block}
     .title{font-size:18px}
     .stat .val{font-size:20px}
     button,.who,.budgetsel{padding:9px 12px}
@@ -255,6 +275,7 @@ var dataErr='';
 function reloadData(){dataStatus='';document.getElementById('app').innerHTML='<div class="empty">Reloading data\u2026</div>';fetchData().then(function(){render();flash(dataStatus==='loaded'?'Loaded from data.json':'Could not load data.json');});}
 var filterCat='All',filterStatus='All',viewLog=false;
 var expanded={};
+var mExpanded={};
 var ALL='\u229E All Budgets';
 var filterBudget='All';
 function isAll(){return store.active===ALL;}
@@ -408,6 +429,53 @@ function pcardRowHTML(i,r,bn){
   return body;
 }
 function bnEsc(bn){return (''+bn).replace(/'/g,"\\'");}
+function mkey(bn,i){return (bn||'_')+'#'+i;}
+function toggleMRow(bn,i){var k=mkey(bn,i);mExpanded[k]=!mExpanded[k];render();}
+function mrowHTML(i,r,bn){
+  var st=statusOf(r);var k=mkey(bn,i);var open=!!mExpanded[k];
+  var b=bnEsc(bn);
+  var caret=open?'\u25B2':'\u25BC';
+  var nums='Total <b>'+RS(rowTotal(r))+'</b> \u00B7 Paid <b>'+RS(rowPaid(r))+'</b> \u00B7 Left <b>'+RS(remainOf(r))+'</b>';
+  var instLine=isInst(r)?' <span style="opacity:.85">('+(r.inst.done||0)+' of '+(r.inst.count||0)+')</span>':'';
+  var h='<div class="mrow '+st+'">'+
+    '<div class="mrowhead" onclick="toggleMRow(\''+b+'\','+i+')">'+
+      '<div class="mrowtop"><span class="dot" style="background:'+budgetCatColor(bn||store.active,r.cat)+'"></span>'+
+        '<span class="nm">'+(r.item||'')+instLine+'</span>'+
+        '<span class="status '+st+'">'+st+'</span>'+
+        '<i style="color:var(--muted);font-size:11px">'+caret+'</i></div>'+
+      '<div class="mrownums">'+nums+'</div>'+
+    '</div>';
+  if(open){
+    var opts=(store.budgets[bn||store.active].cats).map(function(c){return '<option '+(c.id===r.cat?'selected':'')+'>'+c.id+'</option>';}).join('');
+    var bb=bn?(",'"+b+"'"):'';
+    h+='<div class="mrowedit editonly">'+
+      '<div class="two"><div><label>Item</label><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this'+bb+')"></div></div>'+
+      '<div class="two"><div><label>Category</label><select class="cell" onchange="edit('+i+',\'cat\',this'+bb+')">'+opts+'</select></div>'+
+        '<div><label>Date</label><input class="cell" value="'+fmtDate(r.date)+'" placeholder="dd-mmm-yyyy" onchange="edit('+i+',\'date\',this'+bb+')"></div></div>'+
+      '<div class="two"><div><label>Installment?</label><label style="font-size:12px;color:var(--muted)"><input type="checkbox" '+(isInst(r)?'checked':'')+' onchange="toggleInst('+i+bb+')"> plan</label></div></div>'+
+      (isInst(r)?
+        '<div class="two"><div><label>Per installment</label><span class="moneywrap"><input class="cell num" value="'+(r.inst.per||0)+'" onchange="editInst('+i+',\'per\',this'+bb+')"></span></div><div><label>No. of installments</label><input class="cell num" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this'+bb+')"></div></div>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center"><span class="inst">Paid '+RS(rowPaid(r))+' / '+RS(rowTotal(r))+'</span><span class="instbtns"><button class="rowbtn" onclick="instStep('+i+',-1'+bb+')">\u2212</button> <b style="color:var(--part)">'+(r.inst.done||0)+' of '+(r.inst.count||0)+'</b> <button class="rowbtn" onclick="instStep('+i+',1'+bb+')">+</button></span></div>'
+        :
+        '<div class="two"><div><label>Total</label><span class="moneywrap"><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this'+bb+')"></span></div><div><label>Paid so far</label><span class="moneywrap"><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this'+bb+')"></span></div></div>')+
+      '<div style="display:flex;justify-content:flex-end;gap:4px;margin-top:6px">'+
+        (st==='Paid'?'<button class="rowbtn" onclick="markUnpaid('+i+bb+')">&#8635; reset</button>':'<button class="rowbtn" onclick="markPaid('+i+bb+')">&#10003; paid</button>')+
+        '<button class="rowbtn" onclick="moveRow('+i+',-1'+(bn?",'"+b+"'":",''")+')">\u25B2</button>'+
+        '<button class="rowbtn" onclick="moveRow('+i+',1'+(bn?",'"+b+"'":",''")+')">\u25BC</button>'+
+        '<button class="rowbtn danger" onclick="delRow('+i+bb+')">\u2715 delete</button></div>'+
+    '</div>';
+  }
+  h+='</div>';
+  return h;
+}
+function mrowsHTML(bn){
+  var arr=bn?store.budgets[bn].rows:rows();
+  if(!arr.length)return '<div class="empty">No payments yet.</div>';
+  var h='<div class="mrows">';
+  arr.forEach(function(r,i){h+=mrowHTML(i,r,bn||'');});
+  h+='</div>';
+  return h;
+}
 function toggleCard(bn){expanded[bn]=!expanded[bn];render();}
 
 function moveCell(i,bn,n){
@@ -488,13 +556,16 @@ function renderAll(app){
         '<div class="stat pend"><div class="lbl">'+(isLoan?'Outstanding':'Still Owed')+'</div><div class="val">'+RS(ct-cp)+'</div></div>'+
         '<div class="stat"><div class="lbl">Progress</div><div class="val">'+cpct+'%</div><div class="bar"><span style="width:'+cpct+'%;background:var(--paid)"></span><span style="width:'+(100-cpct)+'%;background:var(--pendbg)"></span></div></div>'+
       '</div>';
+    s+='<div class="bcardact"><button onclick="event.stopPropagation();switchBudget(\''+bnEsc(bn)+'\')"><span>Open '+bn+'</span> \u2192</button>'+
+       '<button onclick="event.stopPropagation();toggleCard(\''+bnEsc(bn)+'\')">'+(open?'Hide items \u25B2':'Show items \u25BC')+'</button></div>';
     if(open){
       s+='<div class="bbody">';
       if(!br.length) s+='<div class="empty">No payments yet.</div>';
       else{
-        s+=compactTableHTML(bn);
+        s+='<div class="desktop-table">'+compactTableHTML(bn)+'</div>';
+        s+=mrowsHTML(bn);
       }
-      s+='<div class="addrow"><button class="editonly" onclick="addRow(\''+bnEsc(bn)+'\')">+ Add payment to '+bn+'</button><button onclick="switchBudget(\''+bnEsc(bn)+'\')">Open '+bn+' \u2192</button></div>';
+      s+='<div class="addrow"><button class="editonly" onclick="addRow(\''+bnEsc(bn)+'\')">+ Add payment to '+bn+'</button></div>';
       s+='</div>';
     }
     s+='</div>';
@@ -592,7 +663,12 @@ function render(){
   });
   m+='</div>';
 
-  s+=t+m+'<div class="addrow"><button class="editonly" onclick="addRow()">+ Add payment</button><button class="editonly" onclick="addCategory()">+ New category</button></div>';
+  var mob='<div class="mrows">';
+  if(!idx.length)mob+='<div class="empty">No payments match this filter.</div>';
+  else idx.forEach(function(i){mob+=mrowHTML(i,rows()[i],'');});
+  mob+='</div>';
+
+  s+=t+m+mob+'<div class="addrow"><button class="editonly" onclick="addRow()">+ Add payment</button><button class="editonly" onclick="addCategory()">+ New category</button></div>';
   s+='<div class="note">Reorder items by dragging a row (when no filter is active) or with the <b>\u25B2 \u25BC</b> arrows. Tick <b>installment</b> for per-installment amount &amp; count. Drag a column-header edge to resize (desktop). Export to <b>Excel</b> or JSON up top.</div>';
 
   app.innerHTML=s;
