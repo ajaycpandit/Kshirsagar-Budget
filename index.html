@@ -95,6 +95,13 @@
   .mrowedit .two{display:flex;gap:10px;margin-bottom:8px}.mrowedit .two>div{flex:1}
   .mrowedit label{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
   .mrowedit .cell{background:var(--panel2);border:1px solid var(--line)}
+  /* desktop table rows colored by status */
+  tr.strow td:first-child{border-left:4px solid transparent}
+  tr.strow.Paid{background:var(--paidbg)} tr.strow.Paid td:first-child{border-left-color:var(--paid)}
+  tr.strow.Partial{background:var(--partbg)} tr.strow.Partial td:first-child{border-left-color:var(--part)}
+  tr.strow.Pending{background:var(--pendbg)} tr.strow.Pending td:first-child{border-left-color:var(--pend)}
+  tr.strow .cell{background:transparent}
+  tr.strow .cell:hover{background:var(--panel)}
   .pcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
   .pcard .fld{margin-bottom:10px}
   .pcard .fld label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
@@ -496,7 +503,7 @@ function compactTableHTML(bn){
       totalCell='<span class="moneywrap"><input class="cell num" value="'+r.amt+'" onchange="edit('+i+',\'amt\',this,\''+bnEsc(bn)+'\')"></span>';
       paidCell='<span class="moneywrap"><input class="cell num" value="'+(r.paid||0)+'" onchange="edit('+i+',\'paid\',this,\''+bnEsc(bn)+'\')"></span>';
     }
-    t+='<tr draggable="true" ondragstart="dragStart(event,'+i+',\''+bnEsc(bn)+'\')" ondragover="dragOver(event)" ondrop="dropRow(event,'+i+',\''+bnEsc(bn)+'\')">'+
+    t+='<tr class="strow '+statusOf(r)+'" draggable="true" ondragstart="dragStart(event,'+i+',\''+bnEsc(bn)+'\')" ondragover="dragOver(event)" ondrop="dropRow(event,'+i+',\''+bnEsc(bn)+'\')">'+
       '<td class="draghandle" title="Drag to reorder">\u2630'+moveCell(i,bn,n)+'</td>'+
       '<td><span class="catpill"><span class="dot" style="background:'+budgetCatColor(bn,r.cat)+'"></span><select class="cell" onchange="edit('+i+',\'cat\',this,\''+bnEsc(bn)+'\')">'+opts+'</select></span></td>'+
       '<td><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this,\''+bnEsc(bn)+'\')"><div style="margin-top:2px"><label style="font-size:10px;color:var(--muted);cursor:pointer"><input type="checkbox" '+(isInst(r)?'checked':'')+' onchange="toggleInst('+i+',\''+bnEsc(bn)+'\')"> installment</label></div>'+itemExtra+'</td>'+
@@ -632,7 +639,7 @@ function render(){
       totalCell=moneyIn(i,'amt',r.amt);
       paidCell=moneyIn(i,'paid',r.paid||0);
     }
-    t+='<tr'+(unfiltered?' draggable="true" ondragstart="dragStart(event,'+i+',\'\')" ondragover="dragOver(event)" ondrop="dropRow(event,'+i+',\'\')"':'')+'>'+
+    t+='<tr class="strow '+statusOf(r)+'"'+(unfiltered?' draggable="true" ondragstart="dragStart(event,'+i+',\'\')" ondragover="dragOver(event)" ondrop="dropRow(event,'+i+',\'\')"':'')+'>'+
       '<td><span class="catpill"><span class="dot" style="background:'+catColor(r.cat)+'"></span><select class="cell" onchange="edit('+i+',\'cat\',this)">'+opts+'</select></span></td>'+
       '<td><input class="cell" value="'+(r.item||'').replace(/"/g,'&quot;')+'" onchange="edit('+i+',\'item\',this)">'+instToggle+
         (isInst(r)?'<div class="instbox"><div class="lbl">Installment plan</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px"><span>Per '+moneyInInline(i,'per',r.inst.per||0)+'</span><span>Count <input class="cell num" style="width:60px;display:inline-block" value="'+(r.inst.count||0)+'" onchange="editInst('+i+',\'count\',this)"></span></div></div>':'')+'</td>'+
