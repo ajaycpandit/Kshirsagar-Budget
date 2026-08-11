@@ -80,7 +80,7 @@
   .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
   /* mobile two-line status rows */
   .mrows{display:none}
-  .mrow{border-bottom:1px solid var(--line)}
+  .mrow{border-bottom:2px solid var(--bg)}
   .mrow:last-child{border-bottom:none}
   .mrowhead{padding:10px 12px;cursor:pointer;border-left:4px solid transparent}
   .mrow.Paid .mrowhead{background:var(--paidbg);border-left-color:var(--paid)}
@@ -102,6 +102,10 @@
   tr.strow.Pending{background:var(--pendbg)} tr.strow.Pending td:first-child{border-left-color:var(--pend)}
   tr.strow .cell{background:transparent}
   tr.strow .cell:hover{background:var(--panel)}
+  /* clear separation between item rows */
+  tr.strow td{border-bottom:2px solid var(--bg)}
+  tr.strow:hover td{background:rgba(255,255,255,.04)}
+  .ctbl tr.strow td,table tr.strow td{box-shadow:inset 0 -1px 0 var(--line)}
   .pcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
   .pcard .fld{margin-bottom:10px}
   .pcard .fld label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
